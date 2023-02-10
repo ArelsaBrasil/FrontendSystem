@@ -1,3 +1,10 @@
+import { LoginLayout } from "../layouts/LoginLayout";
+
 export function Luzes() {
-    return <h1>Luzes</h1>
+  return (
+    <>
+      <LoginLayout />
+      {/* <h1>Luzes</h1> */}
+    </>
+  );
 }
