@@ -73,9 +73,12 @@ export const InputFormLogin = styled.input`
 
   &:focus {
     border: 2px solid;
-    border-color: ${(props) => props.theme["green-300"]};
+    border-color: ${(props) => props.theme["gray-100"]};
+    outline-style:solid;
+    outline-width: max(2px);
+    outline-color:  ${(props) => props.theme["green-300"]};
+    
   }
-
 `;
 
 export const SubmitButton = styled.button`
@@ -90,12 +93,14 @@ export const SubmitButton = styled.button`
   border: none;
   margin-top: 40px;
   font-size: 20px;
+  transition: .25s ease-in-out;
 
   cursor: pointer;
 
   &:hover,
   &:focus {
     background: ${(props) => props.theme["green-300"]};
+    transform: scale(1.015);
   }
   &:active {
     background: ${(props) => props.theme["green-700"]};

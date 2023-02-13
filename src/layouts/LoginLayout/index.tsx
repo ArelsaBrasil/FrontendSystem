@@ -28,15 +28,22 @@ export function LoginLayout() {
                     type="text"
                     autoComplete="off"
                     id="username"
-                    placeholder="Usuário"
-                    // onChange={formDataHandler}
-                    // value={customer.firstName}
+                    placeholder="Usuário:"
+                    onInvalid={e => e.target.setCustomValidity('Enter User Name Here')}
+                     // onChange={formDataHandler}
                     required
+                    // value={customer.firstName}
                   />
                 </div>
 
                 <div>
-                  <InputFormLogin type="password" placeholder="Senha: " />
+                  <InputFormLogin
+                    type="password"
+                    autoComplete="off"
+                    id="password"
+                    placeholder="Senha:"
+                    required
+                  />
                 </div>
 
                 <SubmitButton type="submit">Entrar</SubmitButton>
