@@ -29,10 +29,7 @@ export function LoginLayout() {
                     autoComplete="off"
                     id="username"
                     placeholder="Usuário:"
-                    onInvalid={e => e.target.setCustomValidity('Enter User Name Here')}
-                     // onChange={formDataHandler}
                     required
-                    // value={customer.firstName}
                   />
                 </div>
 
@@ -50,6 +47,9 @@ export function LoginLayout() {
               </form>
             </div>
           </LoginCard>
+              <span>
+              © Systemlux-web - v1.0 - vegalux - 2023
+              </span>
         </LoginContainer>
       </ContainerLoginInterface>
     </>

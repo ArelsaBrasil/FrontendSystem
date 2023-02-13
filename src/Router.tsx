@@ -7,7 +7,7 @@ import { Luzes } from "./pages/Luzes";
 export function Router() {
     return (
         <Routes>
-            <Route path="/" element={""} />
+            <Route path="/" element={<Luzes />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/arelsa" element={<Arelsa />} />
             <Route path="/ase" element={<Ase />} />
