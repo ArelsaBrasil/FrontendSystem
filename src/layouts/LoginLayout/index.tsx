@@ -9,6 +9,8 @@ import {
 import wallpaper from "../../assets/images/wallpaperLuzes.jpg";
 import logo from "../../assets/images/luzesDeAcailandiaLogo.png";
 
+import { NavLink } from "react-router-dom";
+
 export function LoginLayout() {
   return (
     <>
@@ -29,7 +31,7 @@ export function LoginLayout() {
                     autoComplete="off"
                     id="username"
                     placeholder="Usuário:"
-                    required
+                    // required
                   />
                 </div>
 
@@ -39,17 +41,16 @@ export function LoginLayout() {
                     autoComplete="off"
                     id="password"
                     placeholder="Senha:"
-                    required
+                    // required
                   />
                 </div>
-
-                <SubmitButton type="submit">Entrar</SubmitButton>
+                <NavLink to="/admin">
+                  <SubmitButton type="submit">Entrar</SubmitButton>
+                </NavLink>
               </form>
             </div>
           </LoginCard>
-              <span>
-              © Systemlux-web - v1.0 - vegalux - 2023
-              </span>
+          <span>© Systemlux-web - v1.0 - vegalux - 2023</span>
         </LoginContainer>
       </ContainerLoginInterface>
     </>

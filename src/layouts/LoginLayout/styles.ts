@@ -34,7 +34,7 @@ export const LoginContainer = styled.div`
 `;
 
 export const LoginCard = styled.div`
-  width: 430px;
+  width: 70%;
   height: 450px;
   display: flex;
   flex-direction: column;
@@ -43,7 +43,7 @@ export const LoginCard = styled.div`
   margin-top: 150px;
 
   img {
-    width: 330px;
+    width: 90%;
   }
   div {
     width: 100%;
@@ -60,14 +60,11 @@ export const LoginCard = styled.div`
     font-size: 0.75rem;
     align-items: flex-end;
   }
-
-  label {
-    width: 20px;
-    height: 40px;
-
-    font-size: 16px;
-    color: ${(props) => props.theme["gray-900"]};
+  a {
+    text-decoration: none;
   }
+
+  
 `;
 
 export const InputFormLogin = styled.input`
