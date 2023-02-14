@@ -81,7 +81,6 @@ export const LoginContainer = styled.div`
 
 export const LoginCard = styled.div`
   width: 90%;
-  height: 50vh;
   border-radius: 17px;
   display: flex;
   flex-direction: column;
