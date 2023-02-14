@@ -81,13 +81,12 @@ export const LoginContainer = styled.div`
 
 export const LoginCard = styled.div`
   width: 90%;
-  height: 40vh;
+  height: 50vh;
   border-radius: 17px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  /* margin-top: 150px; */
   background-color: ${(props) => props.theme.white};
 
   div {
