@@ -51,13 +51,12 @@ export const Wallpaper = styled.div`
     display: block;
     width: 60%;
     height: 100%;
+    overflow: hidden;
 
     img {
       width: 100%;
       height: 100%;
-      background-size: cover;
       object-fit: cover;
-      overflow: hidden;
     }
   }
 `;
@@ -77,7 +76,7 @@ export const LoginContainer = styled.div`
 
   @media (min-width: 769px) {
     width: 40vw;
-    height: 100vh;
+    height: 99vh;
     justify-content: space-between;
 
     span {

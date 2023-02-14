@@ -8,6 +8,12 @@ export const GlobalStyle = createGlobalStyle`
     border: 0;
   }
   
+  body{
+    width: 100vw;
+    height: 100vh;
+  }
+
+
   body, input, textarea, button {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
