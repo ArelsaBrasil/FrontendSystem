@@ -4,7 +4,7 @@ import {
   InputFormLogin,
   LoginCard,
   LoginContainer,
-  LogoAzulimg,
+  LogoAzul,
   LogoBranco,
   SubmitButton,
   Wallpaper,
@@ -19,11 +19,11 @@ export function LoginLayout() {
   return (
     <>
       <ContainerLoginInterface>
-        <Wallpaper>{/* <img src={wallpaper} alt="" /> */}</Wallpaper>
+        <Wallpaper><img src={wallpaper} alt="" /></Wallpaper>
         <LoginContainer>
           <LogoBranco src={logoBranco} alt="" />
           <LoginCard>
-            <LogoAzulimg src={logoAzul} alt="" />
+            <LogoAzul src={logoAzul} alt="" />
 
             <div>
               <p>Login </p>
@@ -49,6 +49,7 @@ export function LoginLayout() {
               </FormLogin>
             </div>
           </LoginCard>
+          <span>© Systemlux-web - v1.0 - vegalux - 2023</span>
         </LoginContainer>
           <span>© Systemlux-web - v1.0 - vegalux - 2023</span>
       </ContainerLoginInterface>

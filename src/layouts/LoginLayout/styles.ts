@@ -10,33 +10,47 @@ export const ContainerLoginInterface = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   span {
     color: ${(props) => props.theme.white};
     font-size: 0.75rem;
   }
-  @media (min-width: 769px) {
-    display: flex;
-    background: ${(props) => props.theme.white};
-  }
 
+  @media (min-width: 769px) {
+    flex-direction: row;
+    background-image: none;
+    span {
+      display: none;
+    }
+  }
 `;
 
 export const LogoBranco = styled.img`
-  @media (max-width: 767px) {
-    width: 80%;
+  width: 80%;
+
+  @media (min-width: 426px) {
+    width: 50%;
+  }
+  @media (min-width: 769px) {
+    display: none;
   }
 `;
-export const LogoAzulimg = styled.img`
+export const LogoAzul = styled.img`
   display: none;
+
   @media (min-width: 769px) {
     display: block;
+    width: 60%;
   }
 `;
 
 export const Wallpaper = styled.div`
+  display: none;
+
   @media (min-width: 769px) {
+    display: block;
     width: 60%;
-    height: 100vh;
+    height: 100%;
 
     img {
       width: 100%;
@@ -58,23 +72,17 @@ export const LoginContainer = styled.div`
   justify-content: center;
 
   span {
-    color: ${(props) => props.theme.white};
-    font-size: 0.75rem;
+    display: none;
   }
 
   @media (min-width: 769px) {
     width: 40vw;
     height: 100vh;
-    display: flex;
-    flex: 1, 20px;
-    flex-direction: column;
-    align-items: center;
     justify-content: space-between;
 
     span {
-      height: 100px;
-      font-size: 0.75rem;
       color: ${(props) => props.theme["gray-900"]};
+      display: block;
     }
   }
 `;
@@ -106,39 +114,33 @@ export const LoginCard = styled.div`
   a {
     text-decoration: none;
     width: 100%;
-    /* height: 100%; */
   }
 
   @media (min-width: 769px) {
-    width: 70%;
+    width: 100%;
     height: 450px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
     margin-top: 150px;
 
-    img {
-      width: 90%;
-    }
     p {
-      font-weight: 700;
-      font-size: 1.75rem;
       padding: 15px 0;
-      margin-top: 60px;
-      margin-bottom: 30px;
+      margin-top: 30px;
       color: ${(props) => props.theme["gray-600"]};
     }
+  }
+
+  @media (min-width: 1439px) {
+    padding: 0 100px;
   }
 `;
 
 export const FormLogin = styled.form`
-  width: 90%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: end;
+  padding: 20px;
 `;
 
 export const InputFormLogin = styled.input`
@@ -164,30 +166,6 @@ export const InputFormLogin = styled.input`
     outline-width: max(2px);
     outline-color: ${(props) => props.theme["green-300"]};
   }
-  @media (min-width: 769px) {
-    width: 100%;
-    height: 60px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: ${(props) => props.theme.white};
-    color: ${(props) => props.theme["gray-900"]};
-    border: 1px solid;
-    border-color: ${(props) => props.theme["gray-400"]};
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-size: 18px;
-
-    &:focus {
-      border: 2px solid;
-      border-color: ${(props) => props.theme["gray-100"]};
-      outline-style: solid;
-      outline-width: max(2px);
-      outline-color: ${(props) => props.theme["green-300"]};
-    }
-  }
 `;
 
 export const SubmitButton = styled.button`
@@ -200,8 +178,6 @@ export const SubmitButton = styled.button`
   background: ${(props) => props.theme["green-500"]};
   color: ${(props) => props.theme.white};
   border: none;
-  margin-top: 30px;
-  margin-bottom: 20px;
   font-size: 20px;
   transition: 0.25s ease-in-out;
 
