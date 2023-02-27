@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import wallpaper from "../../assets/images/wallpaperLuzes.jpg";
+import wallpaper from "../../../assets/images/wallpaperLuzes.jpg";
 
 export const ContainerLoginInterface = styled.div`
   width: 100vw;
@@ -14,6 +14,7 @@ export const ContainerLoginInterface = styled.div`
   span {
     color: ${(props) => props.theme.white};
     font-size: 0.75rem;
+    padding-bottom:10px;
   }
 
   @media (min-width: 769px) {
@@ -26,10 +27,11 @@ export const ContainerLoginInterface = styled.div`
 `;
 
 export const LogoBranco = styled.img`
-  width: 80%;
+  width: 70%;
+  margin-bottom: 20px;
 
   @media (min-width: 426px) {
-    width: 50%;
+    width: 40%;
   }
   @media (min-width: 769px) {
     display: none;
@@ -103,16 +105,15 @@ export const LoginCard = styled.div`
     align-items: center;
     justify-content: space-between;
   }
-  p {
-    font-weight: 700;
-    font-size: 1.75rem;
-    margin: 15px;
-    color: ${(props) => props.theme["gray-600"]};
-  }
-
+  
   a {
     text-decoration: none;
     width: 100%;
+  }
+
+  @media (min-width: 430px) {
+    width: 55%;
+
   }
 
   @media (min-width: 769px) {
@@ -120,11 +121,6 @@ export const LoginCard = styled.div`
     height: 450px;
     margin-top: 150px;
 
-    p {
-      padding: 15px 0;
-      margin-top: 30px;
-      color: ${(props) => props.theme["gray-600"]};
-    }
   }
 
   @media (min-width: 1439px) {
@@ -139,7 +135,7 @@ export const FormLogin = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: end;
-  padding: 20px;
+  padding: 30px 20px;
 `;
 
 export const InputFormLogin = styled.input`
