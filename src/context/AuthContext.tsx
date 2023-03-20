@@ -1,20 +1,27 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
-import { signInRequest } from "../services/auth";
+import {
+  signInRequest,
+  validateCurrentUser,
+  validateUser,
+} from "../services/auth";
 type SignInData = {
   userName: string;
   password: string;
 };
 type User = {
+  id: number;
   name: string;
-  email: string;
+  UserName: string;
 };
 
 type AuthContextType = {
   isAuthenticated: boolean;
   user: User | null;
   signIn: (data: SignInData) => Promise<void>;
+  recoverUserInformation: () => Promise<Object>;
+  setUser: Dispatch<SetStateAction<User | null>>;
 };
 type ChildreType = {
   children: JSX.Element;
@@ -28,27 +35,21 @@ export function AuthProvider({ children }: ChildreType) {
 
   const isAuthenticated = !!user;
 
-  useEffect(() => {
-    const { token } = JSON.parse(localStorage.getItem("current_user") || "{}");
-
-    if (token) {
+  async function recoverUserInformation() {
+    const currentUserDataStorage = JSON.parse(
+      localStorage.getItem("current_user") || "{}"
+    );
+    try {
+      const validCurrentUser = await validateCurrentUser(
+        currentUserDataStorage.token
+      );
+      setUser(validCurrentUser);
+      return validCurrentUser;
+    } catch (error) {
+      // alert(error);
+      return navigate("/luzes");
     }
-  });
-
-  // async function recoverUserInformation(token:string) {
-  //   let config = {
-  //     headers: { Authorization: `Bearer ${token}` }
-  //   }
-  //   await axios
-  //     .get("http://localhost:3001/profile", config)
-  //     .then(function (response) {
-  //       setUser(response);
-
-  //     })
-  //     .catch(function (error) {
-  //      console.log(error);;
-  //     });
-  // }
+  }
 
   async function signIn({ userName, password }: SignInData) {
     try {
@@ -58,15 +59,18 @@ export function AuthProvider({ children }: ChildreType) {
       });
 
       api.defaults.headers["Authorization"] = `Bearer ${token}`;
+
       setUser(user);
       localStorage.setItem("current_user", JSON.stringify({ token, user }));
-      navigate("/luzes/home")
+      navigate("/luzes/home");
     } catch (error) {
       alert(error);
     }
   }
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, setUser, signIn, recoverUserInformation }}
+    >
       {children}
     </AuthContext.Provider>
   );

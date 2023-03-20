@@ -1,12 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { api } from "./api";
 
 type SignInRequestData = {
   userName: string;
   password: string;
 };
-
-const delay = (amount = 750) =>
-  new Promise((resolve) => setTimeout(resolve, amount));
 
 export async function signInRequest(data: SignInRequestData) {
   try {
@@ -17,14 +15,21 @@ export async function signInRequest(data: SignInRequestData) {
   }
 }
 
-export async function recoverUserInformation() {
-  await delay();
+export async function validateUser() {
+  try {
+    const response = await api.get("/profile");
+    return response.data;
+  } catch (error) {
+    throw new Error("Token inválido. ");
+  }
+}
 
-  return {
-    user: {
-      name: "Diego Fernandes",
-      email: "diego@rocketseat.com.br",
-      avatar_url: "https://github.com/diego3g.png",
-    },
-  };
+export async function validateCurrentUser(currentUserDataToken: string) {
+  try {
+    api.defaults.headers["Authorization"] = `Bearer ${currentUserDataToken}`;
+    const response = await api.get("/profile");
+    return response.data;
+  } catch (error) {
+    throw new Error("Token inválido. ");
+  }
 }

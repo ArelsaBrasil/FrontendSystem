@@ -10,25 +10,24 @@ import {
   LogoAzul,
   LogoBranco,
   SubmitButton,
-  Wallpaper
+  Wallpaper,
 } from "./styles";
 
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 
 export function LoginLayout() {
-  const {signIn} =useContext(AuthContext )
-  
-  
+  const { signIn } = useContext(AuthContext);
+
   const [dataLogin, setDatalogin] = useState({
     userName: "",
     password: "",
   });
 
-
-  async function handlerSignIn(){
-   await signIn(dataLogin)
-  };
+  async function handleSubmitSignIn(e: any) {
+    e.preventDefault();
+    await signIn(dataLogin);
+  }
   return (
     <>
       <ContainerLoginInterface>
@@ -41,7 +40,7 @@ export function LoginLayout() {
             <LogoAzul src={logoAzul} alt="" />
 
             <div>
-              <FormLogin >
+              <FormLogin onSubmit={handleSubmitSignIn}>
                 <InputFormLogin
                   autoComplete="off"
                   id="username"
@@ -65,8 +64,8 @@ export function LoginLayout() {
                   value={dataLogin.password}
                   required
                 />
+                <SubmitButton type="submit">Entrar</SubmitButton>
               </FormLogin>
-              <SubmitButton onClick={handlerSignIn}>Entrar</SubmitButton>
             </div>
           </LoginCard>
           <span>© Systemlux-web - v1.0 - vegalux - 2023</span>
