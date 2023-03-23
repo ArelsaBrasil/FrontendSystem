@@ -24,7 +24,7 @@ export function LoginLayout() {
     password: "",
   });
 
-  async function handleSubmitSignIn(e: any) {
+  async function handleSubmitSignIn(e:any) {
     e.preventDefault();
     await signIn(dataLogin);
   }

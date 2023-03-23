@@ -17,6 +17,10 @@ export const defaultTheme = {
   "red-700": "#7A1921",
 
   "yellow-500": "#FBA94C",
+  
+  "blue-brand": "#26377B",
+  "green-brand": "#0AA44D",
+
 };
 
 export const MediaQueries = {
