@@ -5,9 +5,9 @@ export function NavBar() {
   return (
     <NavBarContainer>
       <nav>
-        <StyledNavLink to="/luzes/home/">Home</StyledNavLink>
-        <StyledNavLink to="/luzes/home/atendimento">Atendimento</StyledNavLink>
-        <StyledNavLink to="/luzes/home/geracaoos">Ordem de Serviço</StyledNavLink>
+        <StyledNavLink to="/luzes/home/atendimento">Criar Atendimento</StyledNavLink>
+        <StyledNavLink to="/luzes/home/geracaoos">Gerar Ordem de Serviço</StyledNavLink>
+        <StyledNavLink to="/luzes/home/geracaoos">Pesquisar</StyledNavLink>
       </nav>
     </NavBarContainer>
   );

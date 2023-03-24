@@ -1,6 +1,5 @@
 import { HeaderContainer, HeaderSection, LogoBranco } from "./styles";
-// import logoBranco from "../../../assets/images/luzesDeAcailandiaLogoBranco.png";
-import logoBranco from "../../assets/images/luzesDeAcailandiaLogoBranco.png";
+import logoBranco from "../../assets/images/luzesDeAcailandiaLogoBrancoHeader.png";
 import { ProfileCard } from "../ProfileCard";
 
 export function Header() {
