@@ -19,5 +19,6 @@ export const HeaderContainer = styled.div`
   align-items: center;
 `;
 export const LogoBranco = styled.img`
+margin-top: 5px;
 height: 80px;
 `

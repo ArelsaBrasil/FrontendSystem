@@ -1,7 +1,6 @@
-import { useContext } from "react";
-import { Route, Routes, useNavigate, RouteProps } from "react-router-dom";
-import { AuthContext, AuthProvider } from "./context/AuthContext";
-import { Atendimento } from "./layouts/luzes/Atendimento";
+import { Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { CustomerService } from "./layouts/luzes/CustomerService";
 import { DefaultLayout } from "./layouts/luzes/DefaultLayout";
 import { GeracaoOS } from "./layouts/luzes/GeracaoOS";
 import { Admin } from "./pages/Admin";
@@ -21,7 +20,7 @@ export function Router() {
         <Route path="/luzes" element={<Luzes />} />
         <Route path="/luzes/home" element={<DefaultLayout />}>
           <Route path="/luzes/home/" element={<LuzesHome />} />
-          <Route path="/luzes/home/atendimento" element={<Atendimento />} />
+          <Route path="/luzes/home/atendimento" element={<CustomerService />} />
           <Route path="/luzes/home/geracaoos" element={<GeracaoOS />} />
         </Route>
       </Routes>

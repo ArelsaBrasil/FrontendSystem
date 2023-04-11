@@ -8,6 +8,16 @@ export const defaultTheme = {
   "gray-700": "#29292E",
   "gray-800": "#202024",
   "gray-900": "#121214",
+  "gray-bg-button-disabled": "#A5A5A5",
+  "gray-border-button-disabled": "#E5E5E5",
+  
+  "gray-lists": "#F4F4F4",
+  "gray-lists-hover": "#E5E5E5",
+
+  "gray-bg-inputform": "#F4F4F4",
+  "gray-bg-inputform-hover": "#ECECEC",
+  "gray-bg-inputform-focus": "#E5E5E5",
+  "gray-bg-inputform-disabled": "#DCDCDC",
 
   "green-300": "#00B257",
   "green-500": "#00A24F",
@@ -17,10 +27,13 @@ export const defaultTheme = {
   "red-700": "#7A1921",
 
   "yellow-500": "#FBA94C",
-  
+
   "blue-brand": "#26377B",
   "green-brand": "#0AA44D",
 
+  "blue-focus": "#2684FF",
+  "blue-hover": "#4A98FF",
+  "blue-active": "#004BAC",
 };
 
 export const MediaQueries = {
