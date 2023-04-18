@@ -28,12 +28,12 @@ export const defaultTheme = {
 
   "yellow-500": "#FBA94C",
 
-  "blue-brand": "#26377B",
   "green-brand": "#0AA44D",
-
+  
+  "blue-brand": "#26377B",
   "blue-focus": "#2684FF",
-  "blue-hover": "#4A98FF",
-  "blue-active": "#004BAC",
+  "blue-hover": "#2684FF",
+  "blue-active": "#003579",
 };
 
 export const MediaQueries = {

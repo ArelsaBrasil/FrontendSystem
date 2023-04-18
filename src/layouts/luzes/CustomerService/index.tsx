@@ -72,7 +72,6 @@ export function CustomerService() {
         return i !== index;
       })
     );
-    console.log(index);
   }
 
   useEffect(() => {
@@ -86,7 +85,6 @@ export function CustomerService() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
 
   return (
     <AtendimentoSection>
@@ -188,12 +186,6 @@ export function CustomerService() {
             <section>
               <TextField
                 sx={{ width: "100%" }}
-                InputProps={{
-                  inputComponent: InputMask,
-                  inputProps: {
-                    mask: "(99)99999-9999",
-                  },
-                }}
                 placeholder="(__)_____-____"
                 id="standard-basic"
                 label="Tel"
@@ -326,10 +318,10 @@ export function CustomerService() {
               <Dropzone
                 disabled={selectedServiceReasons === ""}
                 onDrop={(acceptedFiles) => {
-                  // console.log(acceptedFiles);
-                  // console.log(attachedFiles);
-                  setAttachedFiles([...attachedFiles, ...acceptedFiles]);
-                  // console.log(attachedFiles);
+                  const pdfFiles = acceptedFiles.filter(
+                    (file) => file.type === "application/pdf"
+                  );
+                  setAttachedFiles([...attachedFiles, ...pdfFiles]);
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
@@ -341,7 +333,6 @@ export function CustomerService() {
                       <input {...getInputProps()} />
                       <img src={clips} alt="" />
                       <p>
-                        {" "}
                         <b>Anexar arquivos</b>
                       </p>
                       <p>
@@ -357,7 +348,7 @@ export function CustomerService() {
                             type="button"
                             onClick={() => {
                               setIsModalOpen(true);
-                              console.log(index);
+                              setSelectedFile(file);
                             }}
                           >
                             {file.name}
@@ -367,7 +358,7 @@ export function CustomerService() {
                             type="button"
                             onClick={() => handleRemoveFile(index)}
                           >
-                            <X size={18} color="#fff" />
+                            <X size={12} weight="bold" color="#fff" />
                           </button>
                         </section>
                       ))}
@@ -381,11 +372,9 @@ export function CustomerService() {
             isOpen={isModalOpen}
             onCloseModal={() => {
               setIsModalOpen(false);
-            }
-          }
+            }}
             selectedFile={selectedFile}
           />
-
 
           <ContainerSubmitButtons>
             <SubmitButtonFinishAndSend
@@ -399,7 +388,6 @@ export function CustomerService() {
               }
               onClick={(e) => {
                 e.preventDefault();
-                console.log(serviceForm);
               }}
             >
               finalizar

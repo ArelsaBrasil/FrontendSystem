@@ -182,12 +182,18 @@ export const FileList = styled.div`
     &:hover {
       background-color: ${(props) => props.theme["gray-lists-hover"]};
     }
-
-    button:nth-child(2) {
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      cursor: pointer;
+  }
+  
+  button:nth-child(2) {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+    &:hover {
+      color: ${(props) => props.theme["blue-focus"]};
+      text-decoration: underline ;
+      text-decoration-color: ${(props) => props.theme["blue-focus"]};
+      }
     }
     button:nth-child(3) {
       display: flex;
@@ -196,14 +202,14 @@ export const FileList = styled.div`
       padding: 2px;
       border-radius: 20px;
       cursor: pointer;
-      background-color: ${(props) => props.theme["blue-focus"]};
+      background-color: ${(props) => props.theme["gray-500"]};
 
       &:hover {
-        background-color: ${(props) => props.theme["blue-hover"]};
+        background-color: ${(props) => props.theme["blue-focus"]};
       }
       &:active {
         background-color: ${(props) => props.theme["blue-active"]};
       }
     }
-  }
+  
 `;
