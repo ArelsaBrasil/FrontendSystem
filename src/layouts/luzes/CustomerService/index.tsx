@@ -14,6 +14,7 @@ import { AuthContext } from "../../../context/AuthContext";
 import {
   AtendimentoContainer,
   AtendimentoSection,
+  ButtonDeleteItem,
   ContainerLines,
   ContainerSubmitButtons,
   FileList,
@@ -248,7 +249,7 @@ export function CustomerService() {
                       id="standard-multiline-flexible"
                       label="Descrição da Solicitação. "
                       multiline
-                      maxRows={4}
+                      maxRows={3}
                       variant="standard"
                       onChange={(e) =>
                         setServiceForm({
@@ -354,12 +355,12 @@ export function CustomerService() {
                             {file.name}
                           </button>
 
-                          <button
+                          <ButtonDeleteItem
                             type="button"
                             onClick={() => handleRemoveFile(index)}
                           >
                             <X size={12} weight="bold" color="#fff" />
-                          </button>
+                          </ButtonDeleteItem>
                         </section>
                       ))}
                     </FileList>

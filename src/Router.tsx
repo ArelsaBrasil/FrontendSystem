@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CustomerService } from "./layouts/luzes/CustomerService";
-import { DefaultLayout } from "./layouts/luzes/DefaultLayout";
+import { DefaultLayout } from "./layouts/luzes/layouts/DefaultLayout";
 import { GeracaoOS } from "./layouts/luzes/GeracaoOS";
 import { Admin } from "./pages/Admin";
 import { Arelsa } from "./pages/Arelsa";

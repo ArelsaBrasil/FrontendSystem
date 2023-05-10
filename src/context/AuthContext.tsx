@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import {
   signInRequest,
-  validateCurrentUser,
-  validateUser,
+  validateCurrentUser
 } from "../services/auth";
 type SignInData = {
   userName: string;
@@ -46,7 +45,6 @@ export function AuthProvider({ children }: ChildreType) {
       setUser(validCurrentUser);
       return validCurrentUser;
     } catch (error) {
-      // alert(error);
       return navigate("/luzes");
     }
   }

@@ -194,22 +194,23 @@ export const FileList = styled.div`
       text-decoration: underline ;
       text-decoration-color: ${(props) => props.theme["blue-focus"]};
       }
-    }
-    button:nth-child(3) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2px;
-      border-radius: 20px;
-      cursor: pointer;
-      background-color: ${(props) => props.theme["gray-500"]};
+    }  
+`;
 
-      &:hover {
-        background-color: ${(props) => props.theme["blue-focus"]};
-      }
-      &:active {
-        background-color: ${(props) => props.theme["blue-active"]};
-      }
-    }
-  
+
+export const ButtonDeleteItem = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: ${(props) => props.theme["gray-500"]};
+
+  &:hover {
+    background-color: ${(props) => props.theme["blue-focus"]};
+  }
+  &:active {
+    background-color: ${(props) => props.theme["blue-active"]};
+  }
 `;
