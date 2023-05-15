@@ -3,14 +3,14 @@ interface PointDescriptionProps {
   index: number;
 }
 
-export const ServiceSection = styled.div`
+export const AtendimentoSection = styled.div`
   width: 100%;
   height: 100%;
 
   display: flex;
 `;
 
-export const ServiceContainer = styled.div`
+export const AtendimentoContainer = styled.div`
   width: 80%;
 `;
 

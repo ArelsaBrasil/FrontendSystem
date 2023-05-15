@@ -22,6 +22,7 @@ export function Router() {
           <Route path="/luzes/home/" element={<LuzesHome />} />
           <Route path="/luzes/home/atendimento" element={<CustomerService />} />
           <Route path="/luzes/home/geracaoos" element={<GeracaoOS />} />
+          <Route path="/luzes/home/pesquisa" element={<GeracaoOS />} />
         </Route>
       </Routes>
     </AuthProvider>

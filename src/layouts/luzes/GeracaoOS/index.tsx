@@ -6,7 +6,7 @@ import { Map } from "../../../components/Map";
 import { AuthContext } from "../../../context/AuthContext";
 import {
   Address,
-  AtendimentoSection,
+  AtendimentoSection as ServiceSection,
   ButtonDeleteItem,
   ContainerInfos,
   ContainerSubmitButtons,
@@ -92,8 +92,13 @@ export function GeracaoOS() {
     }
   }, [selectedMarkers]);
 
-  return (
-    <AtendimentoSection>
+  const [ServiceOrderCreated, setServiceOrderCreated] = useState<boolean>(true);
+  const handleServiceOrderCreated = () => {
+    setServiceOrderCreated(false);
+  };
+
+  return ServiceOrderCreated ? (
+    <ServiceSection>
       <MapsContainer>
         <Map
           centerPosition={centerPosition}
@@ -208,12 +213,18 @@ export function GeracaoOS() {
             <SubmitButtonFinishAndSend type="submit">
               cancelar
             </SubmitButtonFinishAndSend>
-            <SubmitButton type="submit" disabled={selectedMarkers.length === 0}>
+            <SubmitButton
+              type="submit"
+              onClick={handleServiceOrderCreated}
+              disabled={selectedMarkers.length === 0}
+            >
               gerar OS
             </SubmitButton>
           </ContainerSubmitButtons>
         </ContentSection>
       </ContentContainer>
-    </AtendimentoSection>
+    </ServiceSection>
+  ) : (
+    !ServiceOrderCreated && <h1>Funcionando</h1>
   );
 }
