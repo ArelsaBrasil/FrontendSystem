@@ -61,7 +61,6 @@ export const PointDescription = styled.div`
   &:hover {
     background-color: ${(props) => props.theme["gray-lists-hover"]};
     cursor: unset;
-   
   }
   & div:nth-child(1) {
     display: flex;
@@ -189,4 +188,46 @@ export const SubmitButton = styled.button`
     background: ${(props) => props.theme["gray-bg-button-disabled"]};
     border: 2px solid transparent;
   }
+`;
+
+export const SucessSection = styled.div`
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+export const SucessContainer = styled.div`
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const InfosContainer = styled.div`
+  display: flex;
+  margin-top: 40px;
+  width: 100%;
+`;
+
+export const ImgQrCode = styled.img`
+  width: 180px;
+  height: 180px;
+  margin: 0 40px;
+`;
+
+export const TextContainer = styled.div`
+  font-size: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+`;
+export const ContainerButtonsEndOfService = styled.div`
+  width: 100%;
+
+  gap: 15px;
+  display: flex;
+  justify-content: flex-end;
+  margin: 50px 0;
 `;

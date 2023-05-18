@@ -23,7 +23,7 @@ Modal.setAppElement('#root');
 interface Props {
   isOpen: boolean;
   onCloseModal: () => void;
-  selectedFile: Blob | null;
+  selectedFile?: Blob | null;
 }
 
 export const MyModal = ({ isOpen, onCloseModal, selectedFile }: Props) => {

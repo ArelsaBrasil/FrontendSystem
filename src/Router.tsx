@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CustomerService } from "./layouts/luzes/CustomerService";
 import { DefaultLayout } from "./layouts/luzes/layouts/DefaultLayout";
-import { GeracaoOS } from "./layouts/luzes/GeracaoOS";
+import { ServiceOrderCreation } from "./layouts/luzes/ServiceOrderCreation";
 import { Admin } from "./pages/Admin";
 import { Arelsa } from "./pages/Arelsa";
 import { Ase } from "./pages/Ase";
@@ -21,8 +21,8 @@ export function Router() {
         <Route path="/luzes/home" element={<DefaultLayout />}>
           <Route path="/luzes/home/" element={<LuzesHome />} />
           <Route path="/luzes/home/atendimento" element={<CustomerService />} />
-          <Route path="/luzes/home/geracaoos" element={<GeracaoOS />} />
-          <Route path="/luzes/home/pesquisa" element={<GeracaoOS />} />
+          <Route path="/luzes/home/geracaoos" element={<ServiceOrderCreation />} />
+          <Route path="/luzes/home/pesquisa" element={<ServiceOrderCreation />} />
         </Route>
       </Routes>
     </AuthProvider>
