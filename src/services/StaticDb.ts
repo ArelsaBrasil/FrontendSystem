@@ -15,7 +15,7 @@ export const points = [
     power: "4kw",
     model: "LED YWK",
     serialNumber: 1,
-    lastChange: new Date(2023, 3, 28),
+    lastChange: new Date(2023, 4, 24),
   },
   {
     lat: -4.9486595,
@@ -24,7 +24,7 @@ export const points = [
     power: "5kw",
     model: "LED WKQ",
     serialNumber: 2,
-    lastChange: new Date(2023, 3, 29),
+    lastChange: new Date(2023, 4, 23),
   },
   {
     lat: -4.9487415,
@@ -33,7 +33,7 @@ export const points = [
     power: "4kw",
     model: "LED YWK",
     serialNumber: 3,
-    lastChange: new Date(2023, 3, 26),
+    lastChange: new Date(2023, 4, 22),
   },
   {
     lat: -4.9484508,

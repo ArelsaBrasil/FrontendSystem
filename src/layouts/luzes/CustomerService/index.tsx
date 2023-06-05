@@ -4,12 +4,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { FileArrowUp, X } from "phosphor-react";
-import { FC, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import InputMask from "react-input-mask";
 import { useNavigate } from "react-router-dom";
 
+import { Input } from "@mui/material";
+import { IMaskInput } from "react-imask";
 import clips from "../../../assets/images/clips.png";
+import { MyModal } from "../../../components/MyModal";
 import { AuthContext } from "../../../context/AuthContext";
 import {
   AtendimentoContainer,
@@ -24,9 +26,33 @@ import {
   SubmitButtonFinishAndSend,
   Title,
 } from "./styles";
-import { InputBaseComponentProps } from "@mui/material";
-import { MyModal } from "../../../components/MyModal";
-import Modal from "react-modal";
+
+interface CustomProps {
+  onChange: (event: { target: { name: string; value: string } }) => void;
+  name: string;
+}
+
+const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
+  function TextMaskCustom(props, ref) {
+    const { onChange, ...other } = props;
+    return (
+      <IMaskInput
+        {...other}
+        mask={"(00) 000000000"}
+        placeholder="(00) 000000000"
+        definitions={{
+          "#": /[1-9]/,
+        }}
+        inputRef={ref}
+        onAccept={(value: any) =>
+          onChange({ target: { name: props.name, value } })
+        }
+        autoComplete="off"
+        overwrite
+      />
+    );
+  }
+);
 
 export function CustomerService() {
   const navigate = useNavigate();
@@ -46,19 +72,27 @@ export function CustomerService() {
   const [serviceForm, setServiceForm] = useState({
     meansOfService: "",
     reason: "",
-    requestDescription: "",
-    poleId: "",
     customerName: "",
     customerEmail: "",
     customerPhoneNumber: "",
-    position: "",
+    customerPosition: "",
+    poleId: "",
+    requestDescription: "",
   });
 
   const handleSelectedServiceOptions = (event: SelectChangeEvent) => {
     setSelectedServiceOptions(event.target.value);
+    setServiceForm({
+      ...serviceForm,
+      meansOfService: event.target.value,
+    });
   };
   const handleSelectedServiceReasons = (event: SelectChangeEvent) => {
     setSelectedServiceReasons(event.target.value);
+    setServiceForm({
+      ...serviceForm,
+      reason: event.target.value,
+    });
   };
 
   const [selectedServiceOptions, setSelectedServiceOptions] = useState("");
@@ -86,6 +120,17 @@ export function CustomerService() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const [telephoneNumberFormated, setTelephoneNumberFormated] =
+    React.useState<string>("");
+
+  const phoneHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTelephoneNumberFormated(event.target.value);
+    setServiceForm({
+      ...serviceForm,
+      customerPhoneNumber: event.target.value,
+    });
+  };
 
   return (
     <AtendimentoSection>
@@ -156,12 +201,17 @@ export function CustomerService() {
                 autoComplete="off"
                 type="text"
                 disabled={selectedServiceReasons === ""}
-                onChange={(e) =>
-                  setServiceForm({
-                    ...serviceForm,
-                    customerName: e.target.value,
-                  })
-                }
+                onChange={(e) => {
+                  const input = e.target.value;
+                  const regex = /^[A-Za-z\s]*$/;
+
+                  if (regex.test(input)) {
+                    setServiceForm({
+                      ...serviceForm,
+                      customerName: input,
+                    });
+                  }
+                }}
                 value={serviceForm.customerName}
                 required
               />
@@ -185,23 +235,20 @@ export function CustomerService() {
               />
             </section>
             <section>
-              <TextField
-                sx={{ width: "100%" }}
-                placeholder="(__)_____-____"
-                id="standard-basic"
-                label="Tel"
-                variant="standard"
-                autoComplete="off"
-                type="text"
-                disabled={selectedServiceReasons === ""}
-                onChange={(e) =>
-                  setServiceForm({
-                    ...serviceForm,
-                    customerPhoneNumber: e.target.value,
-                  })
-                }
-                value={serviceForm.customerPhoneNumber}
-              />
+              <FormControl variant="standard" sx={{ width: "100%" }}>
+                <InputLabel htmlFor="formatted-text-mask-input">
+                  Telefone
+                </InputLabel>
+                <Input
+                  disabled={selectedServiceReasons === ""}
+                  value={telephoneNumberFormated}
+                  onChange={phoneHandleChange}
+                  name="formatNumber"
+                  id="formatted-text-mask-input"
+                  inputComponent={TextMaskCustom as any}
+                  autoComplete="off"
+                />
+              </FormControl>
             </section>
           </ContainerLines>
           <ContainerLines isDisabled={selectedServiceReasons === ""}>
@@ -215,9 +262,12 @@ export function CustomerService() {
                 type="text"
                 disabled={selectedServiceReasons === ""}
                 onChange={(e) =>
-                  setServiceForm({ ...serviceForm, position: e.target.value })
+                  setServiceForm({
+                    ...serviceForm,
+                    customerPosition: e.target.value,
+                  })
                 }
-                value={serviceForm.position}
+                value={serviceForm.customerPosition}
               />
               <br />
               {selectedServiceReasons === "Manutenção" && (
@@ -241,7 +291,7 @@ export function CustomerService() {
                   </section>
                 </ContainerLines>
               )}
-              {selectedServiceReasons === "Outros" && (
+              {(selectedServiceReasons === "Outros" || selectedServiceReasons === "Solicitação de novos pontos") && (
                 <ContainerLines>
                   <section>
                     <TextField
@@ -379,7 +429,7 @@ export function CustomerService() {
 
           <ContainerSubmitButtons>
             <SubmitButtonFinishAndSend
-              type="submit"
+              // type="submit"
               disabled={
                 !valuesAreNotEmpty ||
                 !(
@@ -389,12 +439,13 @@ export function CustomerService() {
               }
               onClick={(e) => {
                 e.preventDefault();
+                console.log(serviceForm);
               }}
             >
               finalizar
             </SubmitButtonFinishAndSend>
             <SubmitButtonFinishAndSend
-              type="submit"
+              // type="submit"
               disabled={
                 !valuesAreNotEmpty ||
                 !(
@@ -403,14 +454,22 @@ export function CustomerService() {
                   selectedServiceReasons === "Outros"
                 )
               }
+              onClick={(e) => {
+                e.preventDefault();
+                console.log(serviceForm);
+              }}
             >
               encaminhar
             </SubmitButtonFinishAndSend>
             <SubmitButton
-              type="submit"
+              // type="submit"
               disabled={
                 !valuesAreNotEmpty || !(selectedServiceReasons === "Manutenção")
               }
+              onClick={(e) => {
+                e.preventDefault();
+                console.log(serviceForm);
+              }}
             >
               gerar OS
             </SubmitButton>

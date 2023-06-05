@@ -204,7 +204,7 @@ export function ServiceOrderCreation() {
 
           <section>
             <TextField
-              sx={{ width: "100%" }}
+              sx={{ width: "100%", marginTop:"20px" }}
               id="standard-multiline-flexible"
               label="Descrição da Solicitação. "
               multiline

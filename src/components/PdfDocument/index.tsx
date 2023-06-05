@@ -27,7 +27,7 @@ export const handlePrint = () => {
   doc.setFontSize(16);
   doc.text(`Protocolo: 145641873413`, 130, 27);
 
-  doc.text(`Atendimento cadastrado com sucesso!`, 71, 52);
+  doc.text(`Atendimento cadastrado com sucesso!`, 70, 52);
 
   doc.setFontSize(10);
   doc.text(

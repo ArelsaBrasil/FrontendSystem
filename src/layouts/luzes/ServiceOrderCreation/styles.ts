@@ -67,6 +67,7 @@ export const PointDescription = styled.div`
     align-items: center;
   }
 `;
+
 export const PointContainer = styled.div`
   width: 100%;
   &:hover {
@@ -118,7 +119,7 @@ export const WarningSection = styled.section`
   border-radius: 5px;
   color: white;
   padding: 20px;
-  margin: 20px 0;
+  margin-top: 20px;
   background-color: red;
 `;
 
