@@ -27,6 +27,8 @@ import {
   Title,
 } from "./styles";
 
+import { finishAttendance } from "../../../services/formAttendance";
+
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
   name: string;
@@ -70,7 +72,7 @@ export function CustomerService() {
   }, []);
 
   const [serviceForm, setServiceForm] = useState({
-    meansOfService: "",
+    meansOfAttendance: "",
     reason: "",
     customerName: "",
     customerEmail: "",
@@ -84,7 +86,7 @@ export function CustomerService() {
     setSelectedServiceOptions(event.target.value);
     setServiceForm({
       ...serviceForm,
-      meansOfService: event.target.value,
+      meansOfAttendance: event.target.value,
     });
   };
   const handleSelectedServiceReasons = (event: SelectChangeEvent) => {
@@ -115,6 +117,25 @@ export function CustomerService() {
     };
 
     validateNameAndTel();
+
+    if (selectedServiceReasons === "Duvidas referente a energia") {
+      setServiceForm({
+        ...serviceForm,
+        requestDescription:
+          "Cliente foi orientado a contactar a Equatorial Energia para solucionar suas dúvidas referentes ao fornecimento e distribuição de energia elétrica.",
+      });
+    } else if (selectedServiceReasons === "Duvidas em relação à COSIP") {
+      setServiceForm({
+        ...serviceForm,
+        requestDescription:
+          "Cliente foi orientado a contactar a Secretaria de Tributos para sanar suas duvidas referente a COSIP.",
+      });
+    } else {
+      setServiceForm({
+        ...serviceForm,
+        requestDescription: "",
+      });
+    }
   }, [serviceForm.customerName, selectedServiceReasons]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -131,6 +152,12 @@ export function CustomerService() {
       customerPhoneNumber: event.target.value,
     });
   };
+
+  async function handleFinishAttendance(e: any) {
+    e.preventDefault();
+    console.log(serviceForm);
+    await finishAttendance(serviceForm);
+  }
 
   return (
     <AtendimentoSection>
@@ -291,7 +318,8 @@ export function CustomerService() {
                   </section>
                 </ContainerLines>
               )}
-              {(selectedServiceReasons === "Outros" || selectedServiceReasons === "Solicitação de novos pontos") && (
+              {(selectedServiceReasons === "Outros" ||
+                selectedServiceReasons === "Solicitação de novos pontos") && (
                 <ContainerLines>
                   <section>
                     <TextField
@@ -330,10 +358,7 @@ export function CustomerService() {
                           requestDescription: e.target.value,
                         })
                       }
-                      value={
-                        serviceForm.requestDescription ||
-                        "Cliente foi orientado a contactar a Equatorial Energia para solucionar suas dúvidas referentes ao fornecimento e distribuição de energia elétrica."
-                      }
+                      value={serviceForm.requestDescription}
                     />
                   </section>
                 </ContainerLines>
@@ -356,10 +381,7 @@ export function CustomerService() {
                           requestDescription: e.target.value,
                         })
                       }
-                      value={
-                        serviceForm.requestDescription ||
-                        "Cliente foi orientado a contactar a Secretaria de Tributos para sanar suas duvidas referente a COSIP."
-                      }
+                      value={serviceForm.requestDescription}
                     />
                   </section>
                 </ContainerLines>
@@ -429,7 +451,6 @@ export function CustomerService() {
 
           <ContainerSubmitButtons>
             <SubmitButtonFinishAndSend
-              // type="submit"
               disabled={
                 !valuesAreNotEmpty ||
                 !(
@@ -438,14 +459,12 @@ export function CustomerService() {
                 )
               }
               onClick={(e) => {
-                e.preventDefault();
-                console.log(serviceForm);
+                handleFinishAttendance(e);
               }}
             >
               finalizar
             </SubmitButtonFinishAndSend>
             <SubmitButtonFinishAndSend
-              // type="submit"
               disabled={
                 !valuesAreNotEmpty ||
                 !(
