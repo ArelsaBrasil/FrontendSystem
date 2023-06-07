@@ -85,6 +85,18 @@ export function CustomerService() {
     requestDescription: "",
   });
 
+  const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+
+  const emailValidation =
+    regexEmail.test(serviceForm.customerEmail) ||
+    serviceForm.customerEmail === "";
+
+  const regexTel = /^\(\d{2}\)\s\d{8,9}$/;
+
+  const telValidation =
+    regexTel.test(serviceForm.customerPhoneNumber) ||
+    serviceForm.customerPhoneNumber === "";
+
   const handleSelectedServiceOptions = (event: SelectChangeEvent) => {
     setSelectedServiceOptions(event.target.value);
     setServiceForm({
@@ -465,7 +477,8 @@ export function CustomerService() {
                 !(
                   selectedServiceReasons === "Duvidas referente a energia" ||
                   selectedServiceReasons === "Duvidas em relação à COSIP"
-                )
+                ) ||
+                !emailValidation || !telValidation
               }
               onClick={(e) => {
                 handleFinishAttendance(e);
@@ -480,7 +493,8 @@ export function CustomerService() {
                   selectedServiceReasons === "Manutenção" ||
                   selectedServiceReasons === "Solicitação de novos pontos" ||
                   selectedServiceReasons === "Outros"
-                )
+                ) ||
+                !emailValidation
               }
               onClick={(e) => {
                 handleForwardAttendance(e);
@@ -491,7 +505,9 @@ export function CustomerService() {
             <SubmitButton
               // type="submit"
               disabled={
-                !valuesAreNotEmpty || !(selectedServiceReasons === "Manutenção")
+                !valuesAreNotEmpty ||
+                !(selectedServiceReasons === "Manutenção") ||
+                !emailValidation
               }
               onClick={(e) => {
                 e.preventDefault();
