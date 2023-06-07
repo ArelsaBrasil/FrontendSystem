@@ -27,7 +27,10 @@ import {
   Title,
 } from "./styles";
 
-import { finishAttendance } from "../../../services/formAttendance";
+import {
+  finishAttendance,
+  forwardAttendance,
+} from "../../../services/formAttendance";
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -117,7 +120,9 @@ export function CustomerService() {
     };
 
     validateNameAndTel();
+  }, [serviceForm.customerName, selectedServiceReasons]);
 
+  useEffect(() => {
     if (selectedServiceReasons === "Duvidas referente a energia") {
       setServiceForm({
         ...serviceForm,
@@ -136,7 +141,7 @@ export function CustomerService() {
         requestDescription: "",
       });
     }
-  }, [serviceForm.customerName, selectedServiceReasons]);
+  }, [selectedServiceReasons]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -155,8 +160,12 @@ export function CustomerService() {
 
   async function handleFinishAttendance(e: any) {
     e.preventDefault();
-    console.log(serviceForm);
     await finishAttendance(serviceForm);
+  }
+
+  async function handleForwardAttendance(e: any) {
+    e.preventDefault();
+    await forwardAttendance(serviceForm);
   }
 
   return (
@@ -474,8 +483,7 @@ export function CustomerService() {
                 )
               }
               onClick={(e) => {
-                e.preventDefault();
-                console.log(serviceForm);
+                handleForwardAttendance(e);
               }}
             >
               encaminhar

@@ -20,3 +20,13 @@ export async function finishAttendance(data: finishAttendanceData ) {
     throw new Error("Algum dado inconsistente. ");
   }
 }
+
+
+export async function forwardAttendance(data: finishAttendanceData ) {
+  try {
+    const response = await api.post("/encaminhar-atendimento", data);
+    return response.data;
+  } catch (error) {
+    throw new Error("Algum dado inconsistente. ");
+  }
+}
