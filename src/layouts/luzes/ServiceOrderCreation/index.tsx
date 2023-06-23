@@ -7,14 +7,11 @@ import { AuthContext } from "../../../context/AuthContext";
 import {
   Address,
   ButtonDeleteItem,
-  ContainerButtonsEndOfService,
   ContainerInfos,
   ContainerSubmitButtons,
   ContentContainer,
   ContentSection,
   IdentifierNumber,
-  ImgQrCode,
-  InfosContainer,
   InfosOfPoint,
   LastChangeDate,
   MapsContainer,
@@ -24,17 +21,12 @@ import {
   ServiceSection,
   SubmitButton,
   SubmitButtonFinishAndSend,
-  SucessContainer,
-  SucessSection,
-  TextContainer,
   Title,
   WarningSection,
 } from "./styles";
 
-import qr from "../../../assets/images/qr.jpg";
-
 import { isWithinInterval } from "date-fns";
-import { handlePrint } from "../../../components/PdfDocument";
+import { PrintableProtocol } from "../../../components/PrintableProtocol ";
 
 interface PointInfosI {
   lat: number;
@@ -48,7 +40,6 @@ interface PointInfosI {
 
 export function ServiceOrderCreation() {
   const navigate = useNavigate();
-  749442;
   const { recoverUserInformation } = useContext(AuthContext);
 
   async function returnValidation() {
@@ -101,14 +92,14 @@ export function ServiceOrderCreation() {
     }
   }, [selectedMarkers]);
 
-  const [ServiceOrderCreated, setServiceOrderCreated] = useState<boolean>(true);
+  const [ServiceOrderCreated, setServiceOrderCreated] =
+    useState<boolean>(false);
+
   const handleServiceOrderCreated = () => {
-    setServiceOrderCreated(false);
+    setServiceOrderCreated(true);
   };
 
-  
-
-  return ServiceOrderCreated ? (
+  return !ServiceOrderCreated ? (
     <ServiceSection>
       <MapsContainer>
         <Map
@@ -204,7 +195,7 @@ export function ServiceOrderCreation() {
 
           <section>
             <TextField
-              sx={{ width: "100%", marginTop:"20px" }}
+              sx={{ width: "100%", marginTop: "20px" }}
               id="standard-multiline-flexible"
               label="Descrição da Solicitação. "
               multiline
@@ -236,47 +227,6 @@ export function ServiceOrderCreation() {
       </ContentContainer>
     </ServiceSection>
   ) : (
-    !ServiceOrderCreated && (
-      <SucessSection>
-        <SucessContainer>
-          <Title> Atendimento cadastrado com sucesso! </Title>
-          <h2>Protocolo: 145641873413</h2>
-          <InfosContainer>
-            <ImgQrCode src={qr} />
-            <TextContainer>
-              <p>
-                O atendimento solicitado por <b> Fulano da Silva Sauro</b> em{" "}
-                <b>13-02-2023</b>, foi cadastrado em nosso sistema pelo
-                atendente <b> John Dutton</b> às <b>11:37</b>
-              </p>
-              <p>A Luzes de Açailandia agradesce seu contato.</p>
-              <p>
-                Você pode acompanhar as atualizações desse atendimento através
-                do nosso portal, acessando o link a seguir:
-              </p>
-              <a href="http://luzesdeacailandia.com.br/" target="_blank">
-                www.luzesdeacailandia.com.br/consulta-atendimento/145641873413
-              </a>
-              <p>Ou, também pode scanear o QR code :</p>
-            </TextContainer>
-          </InfosContainer>
-
-          <ContainerButtonsEndOfService>
-            <SubmitButtonFinishAndSend
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            >
-              enviar por whatsapp
-            </SubmitButtonFinishAndSend>
-            <SubmitButtonFinishAndSend type="submit">
-              enviar por e-mail
-            </SubmitButtonFinishAndSend>
-            <SubmitButton onClick={handlePrint}>imprimir</SubmitButton>
-          </ContainerButtonsEndOfService>
-        </SucessContainer>
-      </SucessSection>
-    )
+    ServiceOrderCreated && <PrintableProtocol />
   );
 }

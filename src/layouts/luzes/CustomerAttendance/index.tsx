@@ -13,6 +13,8 @@ import { IMaskInput } from "react-imask";
 import clips from "../../../assets/images/clips.png";
 import { MyModal } from "../../../components/MyModal";
 import { AuthContext } from "../../../context/AuthContext";
+import { FormDataContext } from "../../../context/FormDataContext";
+
 import {
   AtendimentoContainer,
   AtendimentoSection,
@@ -31,6 +33,9 @@ import {
   finishAttendance,
   forwardAttendance,
 } from "../../../services/formAttendance";
+
+import { nanoid } from "nanoid";
+import { PrintableProtocol } from "../../../components/PrintableProtocol ";
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -59,10 +64,11 @@ const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
   }
 );
 
-export function CustomerService() {
+export function CustomerAttendance() {
   const navigate = useNavigate();
   const { recoverUserInformation } = useContext(AuthContext);
   const [attachedFiles, setAttachedFiles] = useState<any>([]);
+
   async function returnValidation() {
     await recoverUserInformation();
     if (!recoverUserInformation) {
@@ -74,7 +80,15 @@ export function CustomerService() {
     returnValidation();
   }, []);
 
-  const [serviceForm, setServiceForm] = useState({
+  const { setCurrentAttendanceForm, setAttendanceFormOfContext } =
+    useContext(FormDataContext);
+
+  const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
+
+  const initialState = {
+    userCreator: user.id,
+    attendant: user.name,
+    attendanceProtocol: nanoid(),
     meansOfAttendance: "",
     reason: "",
     customerName: "",
@@ -83,31 +97,39 @@ export function CustomerService() {
     customerPosition: "",
     poleId: "",
     requestDescription: "",
-  });
+  };
+
+  function resetInitialStateOfAttendanceForm() {
+    setAttendanceForm(initialState);
+    setSelectedServiceOptions("");
+    setSelectedServiceReasons("");
+  }
+
+  const [attendanceForm, setAttendanceForm] = useState(initialState);
 
   const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
   const emailValidation =
-    regexEmail.test(serviceForm.customerEmail) ||
-    serviceForm.customerEmail === "";
+    regexEmail.test(attendanceForm.customerEmail) ||
+    attendanceForm.customerEmail === "";
 
   const regexTel = /^\(\d{2}\)\s\d{8,9}$/;
 
   const telValidation =
-    regexTel.test(serviceForm.customerPhoneNumber) ||
-    serviceForm.customerPhoneNumber === "";
+    regexTel.test(attendanceForm.customerPhoneNumber) ||
+    attendanceForm.customerPhoneNumber === "";
 
   const handleSelectedServiceOptions = (event: SelectChangeEvent) => {
     setSelectedServiceOptions(event.target.value);
-    setServiceForm({
-      ...serviceForm,
+    setAttendanceForm({
+      ...attendanceForm,
       meansOfAttendance: event.target.value,
     });
   };
   const handleSelectedServiceReasons = (event: SelectChangeEvent) => {
     setSelectedServiceReasons(event.target.value);
-    setServiceForm({
-      ...serviceForm,
+    setAttendanceForm({
+      ...attendanceForm,
       reason: event.target.value,
     });
   };
@@ -128,28 +150,28 @@ export function CustomerService() {
 
   useEffect(() => {
     const validateNameAndTel = () => {
-      setValuesAreNotEmpty(serviceForm.customerName.length >= 3);
+      setValuesAreNotEmpty(attendanceForm.customerName.length >= 3);
     };
 
     validateNameAndTel();
-  }, [serviceForm.customerName, selectedServiceReasons]);
+  }, [attendanceForm.customerName, selectedServiceReasons]);
 
   useEffect(() => {
     if (selectedServiceReasons === "Duvidas referente a energia") {
-      setServiceForm({
-        ...serviceForm,
+      setAttendanceForm({
+        ...attendanceForm,
         requestDescription:
           "Cliente foi orientado a contactar a Equatorial Energia para solucionar suas dúvidas referentes ao fornecimento e distribuição de energia elétrica.",
       });
     } else if (selectedServiceReasons === "Duvidas em relação à COSIP") {
-      setServiceForm({
-        ...serviceForm,
+      setAttendanceForm({
+        ...attendanceForm,
         requestDescription:
           "Cliente foi orientado a contactar a Secretaria de Tributos para sanar suas duvidas referente a COSIP.",
       });
     } else {
-      setServiceForm({
-        ...serviceForm,
+      setAttendanceForm({
+        ...attendanceForm,
         requestDescription: "",
       });
     }
@@ -164,23 +186,33 @@ export function CustomerService() {
 
   const phoneHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTelephoneNumberFormated(event.target.value);
-    setServiceForm({
-      ...serviceForm,
+    setAttendanceForm({
+      ...attendanceForm,
       customerPhoneNumber: event.target.value,
     });
   };
 
+  const [attendanceCreatedAndFinished, setAttendanceCreatedAndFinished] =
+    useState<boolean>(false);
+
   async function handleFinishAttendance(e: any) {
     e.preventDefault();
-    await finishAttendance(serviceForm);
+    setCurrentAttendanceForm(attendanceForm);
+    await finishAttendance(attendanceForm);
+    setAttendanceCreatedAndFinished(true);
   }
 
   async function handleForwardAttendance(e: any) {
     e.preventDefault();
-    await forwardAttendance(serviceForm);
+    await forwardAttendance(attendanceForm);
+    setAttendanceCreatedAndFinished(true);
   }
 
-  return (
+  function handleServiceOrderGenerate() {
+    navigate("/luzes/home/geracaoos");
+  }
+
+  return !attendanceCreatedAndFinished ? (
     <AtendimentoSection>
       <AtendimentoContainer>
         <Title> Registro de Atendimentos </Title>
@@ -254,13 +286,13 @@ export function CustomerService() {
                   const regex = /^[A-Za-z\s]*$/;
 
                   if (regex.test(input)) {
-                    setServiceForm({
-                      ...serviceForm,
+                    setAttendanceForm({
+                      ...attendanceForm,
                       customerName: input,
                     });
                   }
                 }}
-                value={serviceForm.customerName}
+                value={attendanceForm.customerName}
                 required
               />
             </section>
@@ -274,12 +306,12 @@ export function CustomerService() {
                 type="text"
                 disabled={selectedServiceReasons === ""}
                 onChange={(e) =>
-                  setServiceForm({
-                    ...serviceForm,
+                  setAttendanceForm({
+                    ...attendanceForm,
                     customerEmail: e.target.value,
                   })
                 }
-                value={serviceForm.customerEmail}
+                value={attendanceForm.customerEmail}
               />
             </section>
             <section>
@@ -310,12 +342,12 @@ export function CustomerService() {
                 type="text"
                 disabled={selectedServiceReasons === ""}
                 onChange={(e) =>
-                  setServiceForm({
-                    ...serviceForm,
+                  setAttendanceForm({
+                    ...attendanceForm,
                     customerPosition: e.target.value,
                   })
                 }
-                value={serviceForm.customerPosition}
+                value={attendanceForm.customerPosition}
               />
               <br />
               {selectedServiceReasons === "Manutenção" && (
@@ -329,12 +361,12 @@ export function CustomerService() {
                       autoComplete="off"
                       type="text"
                       onChange={(e) =>
-                        setServiceForm({
-                          ...serviceForm,
+                        setAttendanceForm({
+                          ...attendanceForm,
                           poleId: e.target.value,
                         })
                       }
-                      value={serviceForm.poleId}
+                      value={attendanceForm.poleId}
                     />
                   </section>
                 </ContainerLines>
@@ -351,12 +383,12 @@ export function CustomerService() {
                       maxRows={3}
                       variant="standard"
                       onChange={(e) =>
-                        setServiceForm({
-                          ...serviceForm,
+                        setAttendanceForm({
+                          ...attendanceForm,
                           requestDescription: e.target.value,
                         })
                       }
-                      value={serviceForm.requestDescription}
+                      value={attendanceForm.requestDescription}
                     />
                   </section>
                 </ContainerLines>
@@ -374,12 +406,12 @@ export function CustomerService() {
                       defaultValue="Default Value"
                       variant="standard"
                       onChange={(e) =>
-                        setServiceForm({
-                          ...serviceForm,
+                        setAttendanceForm({
+                          ...attendanceForm,
                           requestDescription: e.target.value,
                         })
                       }
-                      value={serviceForm.requestDescription}
+                      value={attendanceForm.requestDescription}
                     />
                   </section>
                 </ContainerLines>
@@ -397,12 +429,12 @@ export function CustomerService() {
                       defaultValue="Default Value"
                       variant="standard"
                       onChange={(e) =>
-                        setServiceForm({
-                          ...serviceForm,
+                        setAttendanceForm({
+                          ...attendanceForm,
                           requestDescription: e.target.value,
                         })
                       }
-                      value={serviceForm.requestDescription}
+                      value={attendanceForm.requestDescription}
                     />
                   </section>
                 </ContainerLines>
@@ -478,7 +510,8 @@ export function CustomerService() {
                   selectedServiceReasons === "Duvidas referente a energia" ||
                   selectedServiceReasons === "Duvidas em relação à COSIP"
                 ) ||
-                !emailValidation || !telValidation
+                !emailValidation ||
+                !telValidation
               }
               onClick={(e) => {
                 handleFinishAttendance(e);
@@ -494,7 +527,8 @@ export function CustomerService() {
                   selectedServiceReasons === "Solicitação de novos pontos" ||
                   selectedServiceReasons === "Outros"
                 ) ||
-                !emailValidation
+                !emailValidation ||
+                !telValidation
               }
               onClick={(e) => {
                 handleForwardAttendance(e);
@@ -503,16 +537,13 @@ export function CustomerService() {
               encaminhar
             </SubmitButtonFinishAndSend>
             <SubmitButton
-              // type="submit"
               disabled={
                 !valuesAreNotEmpty ||
                 !(selectedServiceReasons === "Manutenção") ||
-                !emailValidation
+                !emailValidation ||
+                !telValidation
               }
-              onClick={(e) => {
-                e.preventDefault();
-                console.log(serviceForm);
-              }}
+              onClick={handleServiceOrderGenerate}
             >
               gerar OS
             </SubmitButton>
@@ -520,5 +551,7 @@ export function CustomerService() {
         </ServiceForm>
       </AtendimentoContainer>
     </AtendimentoSection>
+  ) : (
+    <PrintableProtocol serviceForm={attendanceForm} />
   );
 }

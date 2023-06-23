@@ -21,3 +21,8 @@ export const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   margin: 0 20px;
 `;
+export const ButtonReturn = styled.button`
+  font-size: 18px;
+  color: white;
+  background-color: transparent;
+`;

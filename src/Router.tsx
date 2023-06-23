@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import { CustomerService } from "./layouts/luzes/CustomerService";
+import { CustomerAttendance } from "./layouts/luzes/CustomerAttendance";
 import { DefaultLayout } from "./layouts/luzes/layouts/DefaultLayout";
 import { ServiceOrderCreation } from "./layouts/luzes/ServiceOrderCreation";
 import { Admin } from "./pages/Admin";
@@ -8,23 +8,35 @@ import { Arelsa } from "./pages/Arelsa";
 import { Ase } from "./pages/Ase";
 import { Luzes } from "./pages/Luzes";
 import { LuzesHome } from "./pages/LuzesHome";
+import { FormDataProvider } from "./context/FormDataContext";
 
 export function Router() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={""} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/arelsa" element={<Arelsa />} />
-        <Route path="/ase" element={<Ase />} />
-        <Route path="/luzes" element={<Luzes />} />
-        <Route path="/luzes/home" element={<DefaultLayout />}>
-          <Route path="/luzes/home/" element={<LuzesHome />} />
-          <Route path="/luzes/home/atendimento" element={<CustomerService />} />
-          <Route path="/luzes/home/geracaoos" element={<ServiceOrderCreation />} />
-          <Route path="/luzes/home/pesquisa" element={<ServiceOrderCreation />} />
-        </Route>
-      </Routes>
+      <FormDataProvider>
+        <Routes>
+          <Route path="/" element={""} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/arelsa" element={<Arelsa />} />
+          <Route path="/ase" element={<Ase />} />
+          <Route path="/luzes" element={<Luzes />} />
+          <Route path="/luzes/home" element={<DefaultLayout />}>
+            <Route path="/luzes/home/" element={<LuzesHome />} />
+            <Route
+              path="/luzes/home/atendimento"
+              element={<CustomerAttendance />}
+            />
+            <Route
+              path="/luzes/home/geracaoos"
+              element={<ServiceOrderCreation />}
+            />
+            <Route
+              path="/luzes/home/pesquisa"
+              element={<ServiceOrderCreation />}
+            />
+          </Route>
+        </Routes>
+      </FormDataProvider>
     </AuthProvider>
   );
 }

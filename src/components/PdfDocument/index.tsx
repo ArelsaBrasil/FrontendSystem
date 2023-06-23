@@ -1,13 +1,33 @@
-import luzesLogo from "../../assets/images/luzesDeAcailandiaLogo.png";
+import luzesLogoTeste from "../../assets/images/luzesDeAcailandiaLogo.png";
 import linhaPreta from "../../assets/images/linhaPreta.png";
-import qr from "../../assets/images/qr.jpg";
+import qr from "../../assets/images/qr.png";
 import jsPDF from "jspdf";
 
-export const handlePrint = () => {
+interface serviceFormI {
+  attendant: string;
+  attendanceProtocol: string;
+  meansOfAttendance: string;
+  reason: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhoneNumber: string;
+  customerPosition: string;
+  poleId: string;
+  requestDescription: string;
+}
+
+export const handlePrint = (serviceForm: serviceFormI) => {
+  const date = new Date(Date.now());
+  const dataFormated = date.toLocaleDateString("pt-BR");
+  const hourFormated = date.toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   const doc = new jsPDF();
 
   doc.addImage({
-    imageData: luzesLogo,
+    imageData: luzesLogoTeste,
     format: "PNG",
     x: 15,
     y: 15,
@@ -24,26 +44,26 @@ export const handlePrint = () => {
     height: 0.2,
   });
 
-  doc.setFontSize(16);
-  doc.text(`Protocolo: 145641873413`, 130, 27);
+  doc.setFontSize(14);
+  doc.text(`Protocolo: ${serviceForm.attendanceProtocol}`, 130, 27);
 
   doc.text(`Atendimento cadastrado com sucesso!`, 70, 52);
 
   doc.setFontSize(10);
   doc.text(
     `
-    O atendimento solicitado por Fulano da Silva Sauro
-    em 13-02-2023 às 11:37, foi cadastrado em nosso sistema
-    pelo atendente John Dutton .
+    O atendimento solicitado por ${serviceForm.customerName}
+    em ${dataFormated} às ${hourFormated}, foi cadastrado em nosso sistema
+    pelo atendente ${serviceForm.attendant} .
 
     A Luzes de Açailandia agradece seu contato.
-    
+
     Você pode acompanhar as atualizações deste atendimento
     através do nosso portal, acessando o link:
-    
-    www.luzesdeacailandia.com.br/consulta-atendimento/145641873413
-    
-    Tembém é possivel ler o QR code:
+
+    www.luzesdeacailandia.com.br/consulta-atendimento/${serviceForm.attendanceProtocol}
+
+    Tembém é possivel ler o QR code ao lado:
     `,
     65,
     58
