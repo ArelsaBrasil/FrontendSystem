@@ -32,9 +32,11 @@ import {
 import {
   finishAttendance,
   forwardAttendance,
+  updateAttendanceProtocol,
 } from "../../../services/formAttendance";
 
 import { nanoid } from "nanoid";
+import { generateProtocolNumber } from "../../../components/GenerateProtocolNumber/GenerateProtocolNumber";
 import { PrintableProtocol } from "../../../components/PrintableProtocol ";
 
 interface CustomProps {
@@ -80,9 +82,6 @@ export function CustomerAttendance() {
     returnValidation();
   }, []);
 
-  const { setCurrentAttendanceForm, setAttendanceFormOfContext } =
-    useContext(FormDataContext);
-
   const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
 
   const initialState = {
@@ -98,12 +97,6 @@ export function CustomerAttendance() {
     poleId: "",
     requestDescription: "",
   };
-
-  function resetInitialStateOfAttendanceForm() {
-    setAttendanceForm(initialState);
-    setSelectedServiceOptions("");
-    setSelectedServiceReasons("");
-  }
 
   const [attendanceForm, setAttendanceForm] = useState(initialState);
 
@@ -197,14 +190,39 @@ export function CustomerAttendance() {
 
   async function handleFinishAttendance(e: any) {
     e.preventDefault();
-    setCurrentAttendanceForm(attendanceForm);
     await finishAttendance(attendanceForm);
+    const newProtocolNumber = await generateProtocolNumber(
+      attendanceForm.attendanceProtocol
+    );
+
+    await updateAttendanceProtocol(
+      attendanceForm.attendanceProtocol,
+      newProtocolNumber
+    );
+    setAttendanceForm({
+      ...attendanceForm,
+      attendanceProtocol: newProtocolNumber,
+    });
+
     setAttendanceCreatedAndFinished(true);
   }
 
   async function handleForwardAttendance(e: any) {
     e.preventDefault();
     await forwardAttendance(attendanceForm);
+    const newProtocolNumber = await generateProtocolNumber(
+      attendanceForm.attendanceProtocol
+    );
+
+    await updateAttendanceProtocol(
+      attendanceForm.attendanceProtocol,
+      newProtocolNumber
+    );
+    setAttendanceForm({
+      ...attendanceForm,
+      attendanceProtocol: newProtocolNumber,
+    });
+
     setAttendanceCreatedAndFinished(true);
   }
 
