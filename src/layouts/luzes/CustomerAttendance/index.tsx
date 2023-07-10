@@ -112,7 +112,8 @@ export function CustomerAttendance() {
     requestDescription: "",
   };
 
-  const [attendanceForm, setAttendanceForm] = useState<IInitialState>(initialState);
+  const [attendanceForm, setAttendanceForm] =
+    useState<IInitialState>(initialState);
 
   const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
@@ -404,7 +405,9 @@ export function CustomerAttendance() {
                 </ContainerLines>
               )}
               {(selectedServiceReasons === "Outros" ||
-                selectedServiceReasons === "Solicitação de novos pontos") && (
+                selectedServiceReasons === "Solicitação de novos pontos" ||
+                selectedServiceReasons === "Duvidas referente a energia" ||
+                selectedServiceReasons === "Duvidas em relação à COSIP") && (
                 <ContainerLines>
                   <section>
                     <TextField
@@ -413,52 +416,7 @@ export function CustomerAttendance() {
                       label="Descrição da Solicitação. "
                       multiline
                       maxRows={3}
-                      variant="standard"
-                      onChange={(e) =>
-                        setAttendanceForm({
-                          ...attendanceForm,
-                          requestDescription: e.target.value,
-                        })
-                      }
-                      value={attendanceForm.requestDescription}
-                    />
-                  </section>
-                </ContainerLines>
-              )}
-
-              {selectedServiceReasons === "Duvidas referente a energia" && (
-                <ContainerLines>
-                  <section>
-                    <TextField
-                      sx={{ mt: 4, width: "100%" }}
-                      id="standard-multiline-flexible"
-                      label="Descrição da Solicitação. "
-                      multiline
-                      maxRows={4}
-                      defaultValue="Default Value"
-                      variant="standard"
-                      onChange={(e) =>
-                        setAttendanceForm({
-                          ...attendanceForm,
-                          requestDescription: e.target.value,
-                        })
-                      }
-                      value={attendanceForm.requestDescription}
-                    />
-                  </section>
-                </ContainerLines>
-              )}
-
-              {selectedServiceReasons === "Duvidas em relação à COSIP" && (
-                <ContainerLines>
-                  <section>
-                    <TextField
-                      sx={{ mt: 4, width: "100%" }}
-                      id="standard-multiline-flexible"
-                      label="Descrição da Solicitação. "
-                      multiline
-                      maxRows={4}
-                      defaultValue="Default Value"
+                      // defaultValue="Default Value"
                       variant="standard"
                       onChange={(e) =>
                         setAttendanceForm({
