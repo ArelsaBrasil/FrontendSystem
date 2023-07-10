@@ -1,5 +1,6 @@
 import qr from "../../assets/images/qr.png";
 import { handlePrint } from "../PdfDocument/index";
+import { SendEmail } from "../SendEmail";
 import {
   ContainerButtonsEndOfService,
   ImgQrCode,
@@ -12,7 +13,15 @@ import {
   Title,
 } from "./styles";
 
-export const PrintableProtocol = ({ serviceForm }: any) => {
+import { IInitialState } from "../../layouts/luzes/CustomerAttendance/index";
+
+interface IPrintableProtocolProps {
+  serviceForm: IInitialState;
+}
+
+export const PrintableProtocol: React.FC<IPrintableProtocolProps> = ({
+  serviceForm,
+}) => {
   const date = new Date(Date.now());
   const dataFormated = date.toLocaleDateString("pt-BR");
   const hourFormated = date.toLocaleTimeString("pt-BR", {
@@ -50,19 +59,14 @@ export const PrintableProtocol = ({ serviceForm }: any) => {
         <ContainerButtonsEndOfService>
           <SubmitButtonFinishAndSend
             disabled={serviceForm.customerPhoneNumber == ""}
-            type="submit"
             onClick={(e) => {
               e.preventDefault();
             }}
           >
             enviar por whatsapp
           </SubmitButtonFinishAndSend>
-          <SubmitButtonFinishAndSend
-            type="submit"
-            disabled={serviceForm.customerEmail == ""}
-          >
-            enviar por e-mail
-          </SubmitButtonFinishAndSend>
+          <SendEmail serviceForm={serviceForm} />
+
           <SubmitButton onClick={() => handlePrint(serviceForm)}>
             imprimir
           </SubmitButton>

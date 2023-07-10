@@ -1,18 +1,7 @@
 import { api } from "./api";
+import { IInitialState } from "../layouts/luzes/CustomerAttendance/index";
 
-interface finishAttendanceDataI {
-  userCreator?: number;
-  meansOfAttendance: string;
-  reason: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhoneNumber: string;
-  customerPosition: string;
-  poleId: string;
-  requestDescription: string;
-}
-
-export async function finishAttendance(data: finishAttendanceDataI) {
+export async function finishAttendance(data: IInitialState) {
   try {
     const response = await api.post("/finalizar-atendimento", data);
     return response.data;
@@ -21,7 +10,7 @@ export async function finishAttendance(data: finishAttendanceDataI) {
   }
 }
 
-export async function forwardAttendance(data: finishAttendanceDataI) {
+export async function forwardAttendance(data: IInitialState) {
   try {
     const response = await api.post("/encaminhar-atendimento", data);
     return response.data;
@@ -49,6 +38,23 @@ export async function updateAttendanceProtocol(
     const response = await api.put(`alterando-numero-protocolo`, {
       attendanceProtocol,
       newAttendanceProtocol,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Atendimento não encontrado. ");
+  }
+}
+
+export async function sendEmailProtocol(
+  customerEmail: string,
+  attendanceProtocol: string,
+  requestDescription: string
+) {
+  try {
+    const response = await api.post(`envio-email`, {
+      to: customerEmail,
+      attendanceProtocol,
+      requestDescription,
     });
     return response.data;
   } catch (error) {

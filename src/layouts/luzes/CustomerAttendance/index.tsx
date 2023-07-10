@@ -44,6 +44,20 @@ interface CustomProps {
   name: string;
 }
 
+export interface IInitialState {
+  userCreator: string;
+  attendant: string;
+  attendanceProtocol: string;
+  meansOfAttendance: string;
+  reason: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhoneNumber: string;
+  customerPosition: string;
+  poleId: string;
+  requestDescription: string;
+}
+
 const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
   function TextMaskCustom(props, ref) {
     const { onChange, ...other } = props;
@@ -84,7 +98,7 @@ export function CustomerAttendance() {
 
   const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
 
-  const initialState = {
+  const initialState: IInitialState = {
     userCreator: user.id,
     attendant: user.name,
     attendanceProtocol: nanoid(),
@@ -98,7 +112,7 @@ export function CustomerAttendance() {
     requestDescription: "",
   };
 
-  const [attendanceForm, setAttendanceForm] = useState(initialState);
+  const [attendanceForm, setAttendanceForm] = useState<IInitialState>(initialState);
 
   const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
