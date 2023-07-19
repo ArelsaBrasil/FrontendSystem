@@ -45,17 +45,13 @@ export async function updateAttendanceProtocol(
   }
 }
 
-export async function sendEmailProtocol(
-  customerEmail: string,
-  attendanceProtocol: string,
-  requestDescription: string
-) {
+export async function sendEmailProtocol(serviceForm:any) {
   try {
     const response = await api.post(`envio-email`, {
-      to: customerEmail,
-      attendanceProtocol,
-      requestDescription,
+      ...serviceForm,
     });
+
+
     return response.data;
   } catch (error) {
     throw new Error("Atendimento não encontrado. ");

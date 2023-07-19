@@ -416,7 +416,6 @@ export function CustomerAttendance() {
                       label="Descrição da Solicitação. "
                       multiline
                       maxRows={3}
-                      // defaultValue="Default Value"
                       variant="standard"
                       onChange={(e) =>
                         setAttendanceForm({
