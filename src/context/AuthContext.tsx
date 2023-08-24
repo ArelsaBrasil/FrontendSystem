@@ -1,10 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
-import {
-  signInRequest,
-  validateCurrentUser
-} from "../services/auth";
+import { signInRequest, validateCurrentUser } from "../services/auth";
 type SignInData = {
   userName: string;
   password: string;
@@ -34,21 +31,6 @@ export function AuthProvider({ children }: ChildreType) {
 
   const isAuthenticated = !!user;
 
-  async function recoverUserInformation() {
-    const currentUserDataStorage = JSON.parse(
-      localStorage.getItem("current_user") || "{}"
-    );
-    try {
-      const validCurrentUser = await validateCurrentUser(
-        currentUserDataStorage.token
-      );
-      setUser(validCurrentUser);
-      return validCurrentUser;
-    } catch (error) {
-      return navigate("/luzes");
-    }
-  }
-
   async function signIn({ userName, password }: SignInData) {
     try {
       const { token, user } = await signInRequest({
@@ -65,6 +47,21 @@ export function AuthProvider({ children }: ChildreType) {
       alert(error);
     }
   }
+  async function recoverUserInformation() {
+    const currentUserDataStorage = JSON.parse(
+      localStorage.getItem("current_user") || "{}"
+    );
+    try {
+      const validCurrentUser = await validateCurrentUser(
+        currentUserDataStorage.token
+      );
+      setUser(validCurrentUser);
+      return validCurrentUser;
+    } catch (error) {
+      return navigate("/luzes");
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{ user, isAuthenticated, setUser, signIn, recoverUserInformation }}

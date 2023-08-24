@@ -25,4 +25,5 @@ export const ButtonReturn = styled.button`
   font-size: 18px;
   color: white;
   background-color: transparent;
+  cursor:pointer;
 `;

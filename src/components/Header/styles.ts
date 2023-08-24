@@ -18,7 +18,16 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
 export const LogoBranco = styled.img`
-margin-top: 5px;
-height: 80px;
-`
+  margin-top: 5px;
+  height: 80px;
+`;
+
+export const ProfileCardContainer = styled.div`
+  height: 100%;
+  display: flex;
+  padding-top: 15px;
+  align-items: start;
+`;
+

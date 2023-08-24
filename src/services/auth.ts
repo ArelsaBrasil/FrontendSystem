@@ -14,15 +14,6 @@ export async function signInRequest(data: SignInRequestData) {
   }
 }
 
-export async function validateUser() {
-  try {
-    const response = await api.get("/profile");
-    return response.data;
-  } catch (error) {
-    throw new Error("Token inválido. ");
-  }
-}
-
 export async function validateCurrentUser(currentUserDataToken: string) {
   try {
     api.defaults.headers["Authorization"] = `Bearer ${currentUserDataToken}`;

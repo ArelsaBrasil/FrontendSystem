@@ -1,4 +1,4 @@
-import { HeaderContainer, HeaderSection, LogoBranco } from "./styles";
+import { HeaderContainer, HeaderSection, LogoBranco, ProfileCardContainer } from "./styles";
 import logoBranco from "../../assets/images/luzesDeAcailandiaLogoBrancoHeader.png";
 import { ProfileCard } from "../ProfileCard";
 
@@ -7,7 +7,9 @@ export function Header() {
     <HeaderSection>
       <HeaderContainer>
         <LogoBranco src={logoBranco} />
-        <ProfileCard />
+        <ProfileCardContainer>
+          <ProfileCard />
+        </ProfileCardContainer>
       </HeaderContainer>
     </HeaderSection>
   );
