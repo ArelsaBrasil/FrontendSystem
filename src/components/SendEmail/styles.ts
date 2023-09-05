@@ -84,6 +84,15 @@ const pulseAnimation = keyframes`
 
 `;
 
+export const SendEmailButtonBlock = styled.button`
+ ${ButtonStyle}
+  padding: 0 50px;
+  background: ${(props) => props.theme.white};
+  color: white;
+  background-color: ${(props) => props.theme["gray-bg-button-disabled"]};
+  cursor: not-allowed;
+`;
+
 export const SendEmailButton = styled.button<{
   isSending: boolean;
   isSent: boolean;
@@ -95,7 +104,7 @@ export const SendEmailButton = styled.button<{
   color: ${(props) => props.theme["green-500"]};
   border: 2px solid ${(props) => props.theme["green-500"]};
 
-  &disabled {
+  &.disabled {
     background-color: gray;
     cursor: not-allowed;
   }

@@ -1,19 +1,26 @@
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-import { FileArrowUp, X } from "phosphor-react";
 import React, { useContext, useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
-import { useNavigate } from "react-router-dom";
-
-import { Input } from "@mui/material";
 import { IMaskInput } from "react-imask";
-import clips from "../../../assets/images/clips.png";
-import { MyModal } from "../../../components/MyModal";
 import { AuthContext } from "../../../context/AuthContext";
 import { FormDataContext } from "../../../context/FormDataContext";
+import { finishAttendance, forwardAttendance, updateAttendanceProtocol } from "../../../services/formAttendance";
+import { generateProtocolNumber } from "../../../components/GenerateProtocolNumber/GenerateProtocolNumber";
+import clips from "../../../assets/images/clips.png";
+import { MyModal } from "../../../components/MyModal";
+import { nanoid } from "nanoid";
+
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Input,
+  SelectChangeEvent,
+} from "@mui/material";
+
+import { FileArrowUp, X } from "phosphor-react";
+import Dropzone from "react-dropzone";
+import { useNavigate } from "react-router-dom";
 
 import {
   AtendimentoContainer,
@@ -29,14 +36,6 @@ import {
   Title,
 } from "./styles";
 
-import {
-  finishAttendance,
-  forwardAttendance,
-  updateAttendanceProtocol,
-} from "../../../services/formAttendance";
-
-import { nanoid } from "nanoid";
-import { generateProtocolNumber } from "../../../components/GenerateProtocolNumber/GenerateProtocolNumber";
 import { PrintableProtocol } from "../../../components/PrintableProtocol ";
 
 interface CustomProps {
@@ -81,9 +80,25 @@ const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
 );
 
 export function CustomerAttendance() {
+  const [selectedServiceOptions, setSelectedServiceOptions] = useState("");
+  const [selectedServiceReasons, setSelectedServiceReasons] = useState("");
+  const [valuesAreNotEmpty, setValuesAreNotEmpty] = useState(false);
+  const [telephoneNumberFormated, setTelephoneNumberFormated] = useState<string>("");
+
   const navigate = useNavigate();
   const { recoverUserInformation } = useContext(AuthContext);
+  const { attendanceFormOfContext, setCurrentAttendanceForm } = useContext(FormDataContext);
+
   const [attachedFiles, setAttachedFiles] = useState<any>([]);
+
+  const [attendanceForm, setAttendanceForm] = useState<IInitialState>(
+    attendanceFormOfContext
+  );
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const [attendanceCreatedAndFinished, setAttendanceCreatedAndFinished] = useState<boolean>(false);
 
   async function returnValidation() {
     await recoverUserInformation();
@@ -96,64 +111,32 @@ export function CustomerAttendance() {
     returnValidation();
   }, []);
 
-  const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
-
-  const initialState: IInitialState = {
-    userCreator: user.id,
-    attendant: user.name,
-    attendanceProtocol: nanoid(),
-    meansOfAttendance: "",
-    reason: "",
-    customerName: "",
-    customerEmail: "",
-    customerPhoneNumber: "",
-    customerPosition: "",
-    poleId: "",
-    requestDescription: "",
-  };
-
-  const [attendanceForm, setAttendanceForm] =
-    useState<IInitialState>(initialState);
+  useEffect(() => {
+    if (attendanceFormOfContext.attendanceProtocol != "") {
+      setSelectedServiceOptions(attendanceFormOfContext.meansOfAttendance);
+      setSelectedServiceReasons(attendanceFormOfContext.reason);
+      setTelephoneNumberFormated(attendanceFormOfContext.customerPhoneNumber);
+    }
+  }, []);
 
   const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-
-  const emailValidation =
-    regexEmail.test(attendanceForm.customerEmail) ||
-    attendanceForm.customerEmail === "";
+  const emailValidation = regexEmail.test(attendanceForm.customerEmail) || attendanceForm.customerEmail === "";
 
   const regexTel = /^\(\d{2}\)\s\d{8,9}$/;
+  const telValidation = regexTel.test(attendanceForm.customerPhoneNumber) || attendanceForm.customerPhoneNumber === "";
 
-  const telValidation =
-    regexTel.test(attendanceForm.customerPhoneNumber) ||
-    attendanceForm.customerPhoneNumber === "";
-
-  const handleSelectedServiceOptions = (event: SelectChangeEvent) => {
-    setSelectedServiceOptions(event.target.value);
-    setAttendanceForm({
-      ...attendanceForm,
-      meansOfAttendance: event.target.value,
-    });
-  };
-  const handleSelectedServiceReasons = (event: SelectChangeEvent) => {
-    setSelectedServiceReasons(event.target.value);
-    setAttendanceForm({
-      ...attendanceForm,
-      reason: event.target.value,
-    });
+  const handleSelectedServiceOptions = (event: SelectChangeEvent<string>) => {
+    setSelectedServiceOptions(event.target.value as string);
+    setAttendanceForm({ ...attendanceForm, meansOfAttendance: event.target.value as string});
   };
 
-  const [selectedServiceOptions, setSelectedServiceOptions] = useState("");
-
-  const [selectedServiceReasons, setSelectedServiceReasons] = useState("");
-
-  const [valuesAreNotEmpty, setValuesAreNotEmpty] = useState(false);
+  const handleSelectedServiceReasons = (event: SelectChangeEvent<string>) => {
+    setSelectedServiceReasons(event.target.value as string);
+    setAttendanceForm({ ...attendanceForm, reason: event.target.value as string });
+  };
 
   function handleRemoveFile(index: number) {
-    setAttachedFiles(
-      attachedFiles.filter((teste: any, i: number) => {
-        return i !== index;
-      })
-    );
+    setAttachedFiles(attachedFiles.filter((i: number) => i !== index));
   }
 
   useEffect(() => {
@@ -165,59 +148,31 @@ export function CustomerAttendance() {
   }, [attendanceForm.customerName, selectedServiceReasons]);
 
   useEffect(() => {
+    let requestDescription = "";
     if (selectedServiceReasons === "Duvidas referente a energia") {
-      setAttendanceForm({
-        ...attendanceForm,
-        requestDescription:
-          "Cliente foi orientado a contactar a Equatorial Energia para solucionar suas dúvidas referentes ao fornecimento e distribuição de energia elétrica.",
-      });
+      requestDescription = "Cliente foi orientado a contactar a Equatorial Energia para solucionar suas dúvidas referentes ao fornecimento e distribuição de energia elétrica.";
     } else if (selectedServiceReasons === "Duvidas em relação à COSIP") {
-      setAttendanceForm({
-        ...attendanceForm,
-        requestDescription:
-          "Cliente foi orientado a contactar a Secretaria de Tributos para sanar suas duvidas referente a COSIP.",
-      });
-    } else {
-      setAttendanceForm({
-        ...attendanceForm,
-        requestDescription: "",
-      });
+      requestDescription = "Cliente foi orientado a contactar a Secretaria de Tributos para sanar suas duvidas referente a COSIP.";
     }
+
+    setAttendanceForm({
+      ...attendanceForm,
+      requestDescription,
+    });
   }, [selectedServiceReasons]);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  const [telephoneNumberFormated, setTelephoneNumberFormated] =
-    React.useState<string>("");
 
   const phoneHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTelephoneNumberFormated(event.target.value);
-    setAttendanceForm({
-      ...attendanceForm,
-      customerPhoneNumber: event.target.value,
-    });
+    setAttendanceForm({ ...attendanceForm, customerPhoneNumber: event.target.value });
   };
-
-  const [attendanceCreatedAndFinished, setAttendanceCreatedAndFinished] =
-    useState<boolean>(false);
 
   async function handleFinishAttendance(e: any) {
     e.preventDefault();
     await finishAttendance(attendanceForm);
-    const newProtocolNumber = await generateProtocolNumber(
-      attendanceForm.attendanceProtocol
-    );
+    const newProtocolNumber = await generateProtocolNumber(attendanceForm.attendanceProtocol);
 
-    await updateAttendanceProtocol(
-      attendanceForm.attendanceProtocol,
-      newProtocolNumber
-    );
-    setAttendanceForm({
-      ...attendanceForm,
-      attendanceProtocol: newProtocolNumber,
-    });
+    await updateAttendanceProtocol(attendanceForm.attendanceProtocol, newProtocolNumber);
+    setAttendanceForm({ ...attendanceForm, attendanceProtocol: newProtocolNumber });
 
     setAttendanceCreatedAndFinished(true);
   }
@@ -225,23 +180,16 @@ export function CustomerAttendance() {
   async function handleForwardAttendance(e: any) {
     e.preventDefault();
     await forwardAttendance(attendanceForm);
-    const newProtocolNumber = await generateProtocolNumber(
-      attendanceForm.attendanceProtocol
-    );
+    const newProtocolNumber = await generateProtocolNumber(attendanceForm.attendanceProtocol);
 
-    await updateAttendanceProtocol(
-      attendanceForm.attendanceProtocol,
-      newProtocolNumber
-    );
-    setAttendanceForm({
-      ...attendanceForm,
-      attendanceProtocol: newProtocolNumber,
-    });
+    await updateAttendanceProtocol(attendanceForm.attendanceProtocol, newProtocolNumber);
+    setAttendanceForm({ ...attendanceForm, attendanceProtocol: newProtocolNumber });
 
     setAttendanceCreatedAndFinished(true);
   }
 
   function handleServiceOrderGenerate() {
+    setCurrentAttendanceForm(attendanceForm);
     navigate("/luzes/home/geracaoos");
   }
 
@@ -253,9 +201,7 @@ export function CustomerAttendance() {
           <ContainerLines>
             <section>
               <FormControl variant="standard" sx={{ width: "100%" }}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Canal
-                </InputLabel>
+                <InputLabel id="demo-simple-select-standard-label">Canal</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
@@ -278,9 +224,7 @@ export function CustomerAttendance() {
                 sx={{ width: "100%" }}
                 disabled={selectedServiceOptions === ""}
               >
-                <InputLabel id="demo-simple-select-standard-label">
-                  Motivo
-                </InputLabel>
+                <InputLabel id="demo-simple-select-standard-label">Motivo</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
@@ -289,15 +233,9 @@ export function CustomerAttendance() {
                   label="Age"
                 >
                   <MenuItem value={"Manutenção"}>Manutenção</MenuItem>
-                  <MenuItem value={"Solicitação de novos pontos"}>
-                    Solicitação de novos pontos
-                  </MenuItem>
-                  <MenuItem value={"Duvidas em relação à COSIP"}>
-                    Duvidas em relação à COSIP
-                  </MenuItem>
-                  <MenuItem value={"Duvidas referente a energia"}>
-                    Duvidas referente a energia
-                  </MenuItem>
+                  <MenuItem value={"Solicitação de novos pontos"}>Solicitação de novos pontos</MenuItem>
+                  <MenuItem value={"Duvidas em relação à COSIP"}>Duvidas em relação à COSIP</MenuItem>
+                  <MenuItem value={"Duvidas referente a energia"}>Duvidas referente a energia</MenuItem>
                   <MenuItem value={"Outros"}>Outros</MenuItem>
                 </Select>
               </FormControl>
@@ -349,9 +287,7 @@ export function CustomerAttendance() {
             </section>
             <section>
               <FormControl variant="standard" sx={{ width: "100%" }}>
-                <InputLabel htmlFor="formatted-text-mask-input">
-                  Telefone
-                </InputLabel>
+                <InputLabel htmlFor="formatted-text-mask-input">Telefone</InputLabel>
                 <Input
                   disabled={selectedServiceReasons === ""}
                   value={telephoneNumberFormated}
@@ -413,7 +349,7 @@ export function CustomerAttendance() {
                     <TextField
                       sx={{ mt: 4, width: "100%" }}
                       id="standard-multiline-flexible"
-                      label="Descrição da Solicitação. "
+                      label="Descrição da Solicitação."
                       multiline
                       maxRows={3}
                       variant="standard"
@@ -451,8 +387,7 @@ export function CustomerAttendance() {
                         <b>Anexar arquivos</b>
                       </p>
                       <p>
-                        Arraste e solte os arquivos aqui, ou click para
-                        selecionar os arquivos.
+                        Arraste e solte os arquivos aqui, ou clique para selecionar os arquivos.
                       </p>
                     </StyledDropzone>
                     <FileList>
@@ -468,7 +403,6 @@ export function CustomerAttendance() {
                           >
                             {file.name}
                           </button>
-
                           <ButtonDeleteItem
                             type="button"
                             onClick={() => handleRemoveFile(index)}
@@ -490,7 +424,6 @@ export function CustomerAttendance() {
             }}
             selectedFile={selectedFile}
           />
-
           <ContainerSubmitButtons>
             <SubmitButtonFinishAndSend
               disabled={
@@ -506,7 +439,7 @@ export function CustomerAttendance() {
                 handleFinishAttendance(e);
               }}
             >
-              finalizar
+              Finalizar
             </SubmitButtonFinishAndSend>
             <SubmitButtonFinishAndSend
               disabled={
@@ -523,7 +456,7 @@ export function CustomerAttendance() {
                 handleForwardAttendance(e);
               }}
             >
-              encaminhar
+              Encaminhar
             </SubmitButtonFinishAndSend>
             <SubmitButton
               disabled={
@@ -534,7 +467,7 @@ export function CustomerAttendance() {
               }
               onClick={handleServiceOrderGenerate}
             >
-              gerar OS
+              Gerar OS
             </SubmitButton>
           </ContainerSubmitButtons>
         </ServiceForm>

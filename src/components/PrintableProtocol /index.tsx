@@ -57,14 +57,15 @@ export const PrintableProtocol: React.FC<IPrintableProtocolProps> = ({
         </InfosContainer>
 
         <ContainerButtonsEndOfService>
-          <SubmitButtonFinishAndSend
+          {/* <SubmitButtonFinishAndSend
             disabled={serviceForm.customerPhoneNumber == ""}
             onClick={(e) => {
               e.preventDefault();
             }}
           >
             enviar por whatsapp
-          </SubmitButtonFinishAndSend>
+          </SubmitButtonFinishAndSend> */}
+          
           <SendEmail serviceForm={serviceForm} />
 
           <SubmitButton onClick={() => handlePrint(serviceForm)}>

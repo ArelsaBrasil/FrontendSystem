@@ -27,6 +27,7 @@ import {
 
 import { isWithinInterval } from "date-fns";
 import { PrintableProtocol } from "../../../components/PrintableProtocol ";
+import { FormDataContext } from "../../../context/FormDataContext";
 
 interface PointInfosI {
   lat: number;
@@ -41,6 +42,7 @@ interface PointInfosI {
 export function ServiceOrderCreation() {
   const navigate = useNavigate();
   const { recoverUserInformation } = useContext(AuthContext);
+  const { attendanceFormOfContext,resetAttendanceForm } = useContext(FormDataContext);
 
   async function returnValidation() {
     await recoverUserInformation();
@@ -97,6 +99,15 @@ export function ServiceOrderCreation() {
 
   const handleServiceOrderCreated = () => {
     setServiceOrderCreated(true);
+  };
+
+  const handleReturnToAttendance = () => {
+    navigate("/luzes/home/atendimento");
+  };
+
+  const handleCancelingAttendance = () => {
+    resetAttendanceForm()
+    navigate("/luzes/home/atendimento");
   };
 
   return !ServiceOrderCreated ? (
@@ -208,11 +219,18 @@ export function ServiceOrderCreation() {
               type="submit"
               onClick={(e) => {
                 e.preventDefault();
+                handleReturnToAttendance();
               }}
             >
               voltar
             </SubmitButtonFinishAndSend>
-            <SubmitButtonFinishAndSend type="submit">
+            <SubmitButtonFinishAndSend
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                handleCancelingAttendance();
+              }}
+            >
               cancelar
             </SubmitButtonFinishAndSend>
             <SubmitButton
