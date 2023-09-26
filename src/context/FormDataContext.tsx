@@ -1,9 +1,19 @@
 import { nanoid } from "nanoid";
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+
+interface PointIdI {
+  pointId: number;
+}
 
 interface AttendanceFormI {
   userCreator: string;
-  attendant: string;
+  attendant?: string;
   attendanceProtocol: string;
   meansOfAttendance: string;
   reason: string;
@@ -13,6 +23,8 @@ interface AttendanceFormI {
   customerPosition: string;
   poleId: string;
   requestDescription: string;
+  description?: string;
+  os?: PointIdI[];
 }
 
 interface FormDataContextI {
@@ -31,8 +43,8 @@ export function FormDataProvider({ children }: ChildreType) {
   const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
 
   const initialState: AttendanceFormI = {
-    userCreator: user.id,
-    attendant: user.name,
+    userCreator: "",
+    attendant: "",
     attendanceProtocol: nanoid(),
     meansOfAttendance: "",
     reason: "",
@@ -46,6 +58,17 @@ export function FormDataProvider({ children }: ChildreType) {
 
   const [attendanceFormOfContext, setAttendanceFormOfContext] =
     useState(initialState);
+
+  attendanceFormOfContext.userCreator == "" &&
+    setAttendanceFormOfContext({
+      ...attendanceFormOfContext,
+      userCreator: user.id,
+    });
+  attendanceFormOfContext.attendant == "" &&
+    setAttendanceFormOfContext({
+      ...attendanceFormOfContext,
+      attendant: user.name,
+    });
 
   function setCurrentAttendanceForm(currentForm: AttendanceFormI) {
     setAttendanceFormOfContext(currentForm);
@@ -61,7 +84,6 @@ export function FormDataProvider({ children }: ChildreType) {
         attendanceFormOfContext,
         setCurrentAttendanceForm,
         resetAttendanceForm,
-        
       }}
     >
       {children}

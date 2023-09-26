@@ -1,19 +1,7 @@
+import { SelectChangeEvent, TextField } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-} from "@mui/material";
-import { FileArrowUp, X } from "phosphor-react";
-import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 
-import { Input } from "@mui/material";
-import { IMaskInput } from "react-imask";
-import clips from "../../../assets/images/clips.png";
 import { MyModal } from "../../components/MyModal";
 import { AuthContext } from "../../context/AuthContext";
 import { FormDataContext } from "../../context/FormDataContext";
@@ -21,21 +9,18 @@ import { FormDataContext } from "../../context/FormDataContext";
 import {
   finishAttendance,
   forwardAttendance,
-  updateAttendanceProtocol,
 } from "../../services/formAttendance";
 
 import { nanoid } from "nanoid";
+import { DropzoneSection } from "../CustomerAttendance/DropzoneSection";
+import { ServiceButtons } from "../CustomerAttendance/ServiceButtons";
 import {
-  generateProtocolNumber,
-  PrintableProtocol,
-} from "../GenerateProtocolNumber";
-import {  DropzoneSection, ServiceButtons } from "../";
-import {
-  AtendimentoSection,
   AtendimentoContainer,
-  ServiceForm,
+  AtendimentoSection,
   ContainerLines,
+  ServiceForm,
 } from "../../layouts/luzes/CustomerAttendance/styles";
+import { PrintableProtocol } from "../PrintableProtocol ";
 import { Title } from "./styles";
 
 interface IInitialState {
@@ -84,8 +69,8 @@ export function CustomerForm() {
   const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
 
   const initialState: IInitialState = {
-    userCreator: user.id,
-    attendant: user.name,
+    userCreator:user.name,
+    attendant: user.id,
     attendanceProtocol: nanoid(),
     meansOfAttendance: "",
     reason: "",
@@ -99,11 +84,9 @@ export function CustomerForm() {
 
   const [attendanceForm, setAttendanceForm] =
     useState<IInitialState>(initialState);
-  console.log("fora do state");
 
   useEffect(() => {
     setIsLoading(true);
-    console.log("dentro do state");
     if (attendanceFormOfContext.attendanceProtocol !== "") {
       setAttendanceForm({
         ...attendanceForm,
@@ -166,18 +149,6 @@ export function CustomerForm() {
   const handleFinishAttendance = async (e: any) => {
     e.preventDefault();
     await finishAttendance(attendanceForm);
-    const newProtocolNumber = await generateProtocolNumber(
-      attendanceForm.attendanceProtocol
-    );
-
-    await updateAttendanceProtocol(
-      attendanceForm.attendanceProtocol,
-      newProtocolNumber
-    );
-    setAttendanceForm({
-      ...attendanceForm,
-      attendanceProtocol: newProtocolNumber,
-    });
 
     setAttendanceCreatedAndFinished(true);
   };
@@ -185,18 +156,6 @@ export function CustomerForm() {
   const handleForwardAttendance = async (e: any) => {
     e.preventDefault();
     await forwardAttendance(attendanceForm);
-    const newProtocolNumber = await generateProtocolNumber(
-      attendanceForm.attendanceProtocol
-    );
-
-    await updateAttendanceProtocol(
-      attendanceForm.attendanceProtocol,
-      newProtocolNumber
-    );
-    setAttendanceForm({
-      ...attendanceForm,
-      attendanceProtocol: newProtocolNumber,
-    });
 
     setAttendanceCreatedAndFinished(true);
   };
@@ -240,7 +199,6 @@ export function CustomerForm() {
         <ServiceForm>
           <ContainerLines>
             <section>
-              {/* Campos e componentes para a primeira seção do formulário */}
               <TextField
                 label="Nome do Cliente"
                 variant="outlined"
@@ -253,10 +211,8 @@ export function CustomerForm() {
                   })
                 }
               />
-              {/* Adicione mais campos conforme necessário */}
             </section>
             <section>
-              {/* Campos e componentes para a segunda seção do formulário */}
               <TextField
                 label="Email"
                 variant="outlined"
@@ -269,11 +225,8 @@ export function CustomerForm() {
                   })
                 }
               />
-              {/* Adicione mais campos conforme necessário */}
             </section>
           </ContainerLines>
-
-          {/* Mais seções e campos do formulário podem ser adicionados aqui */}
 
           <DropzoneSection
             disabled={selectedServiceReasons === ""}

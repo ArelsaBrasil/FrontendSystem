@@ -11,11 +11,9 @@ export const SendEmail = ({ serviceForm }: any) => {
   const [haveError, setHaveError] = useState(false);
 
   async function handleSendEmail() {
-    console.log("clicado");
     setIsSending(true);
 
     const sendEmailProtocolReturn = await sendEmailProtocol(serviceForm);
-    console.log(sendEmailProtocolReturn);
 
     const isErrored = sendEmailProtocolReturn.toLowerCase().includes("erro");
 

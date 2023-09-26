@@ -1,10 +1,9 @@
-import React from "react";
 import { ContainerSubmitButtons, SubmitButton, SubmitButtonFinishAndSend } from "./styles";
 
 interface ServiceButtonsProps {
   valuesAreNotEmpty: boolean;
   selectedServiceReasons: string;
-  attendanceForm: any; // Replace 'any' with the appropriate type
+  attendanceForm: any;
   handleFinishAttendance: (e: any) => void;
   handleForwardAttendance: (e: any) => void;
   handleServiceOrderGenerate: () => void;

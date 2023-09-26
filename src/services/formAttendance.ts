@@ -2,6 +2,7 @@ import { api } from "./api";
 import { IInitialState } from "../layouts/luzes/CustomerAttendance/index";
 
 export async function finishAttendance(data: IInitialState) {
+  
   try {
     const response = await api.post("/finalizar-atendimento", data);
     return response.data;
@@ -30,21 +31,6 @@ export async function seekingAttendance(attendanceProtocol: string) {
   }
 }
 
-export async function updateAttendanceProtocol(
-  attendanceProtocol: string,
-  newAttendanceProtocol: string
-) {
-  try {
-    const response = await api.put(`alterando-numero-protocolo`, {
-      attendanceProtocol,
-      newAttendanceProtocol,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error("Atendimento não encontrado. ");
-  }
-}
-
 export async function sendEmailProtocol(serviceForm:any) {
   try {
     const response = await api.post(`envio-email`, {
@@ -55,5 +41,18 @@ export async function sendEmailProtocol(serviceForm:any) {
     return response.data;
   } catch (error) {
     throw new Error("Atendimento não encontrado. ");
+  }
+}
+
+export async function creatingAttendanceWithSO(serviceForm:any) {
+  try {
+    const response = await api.post(`atendimento-os`, {
+      ...serviceForm,
+    });
+
+
+    return response.data;
+  } catch (error) {
+    throw new Error("Operação não efetuada com sucesso. ");
   }
 }

@@ -28,6 +28,8 @@ import {
 import { isWithinInterval } from "date-fns";
 import { PrintableProtocol } from "../../../components/PrintableProtocol ";
 import { FormDataContext } from "../../../context/FormDataContext";
+import { creatingAttendanceWithSO } from "../../../services/formAttendance";
+import { ServiceForm } from "../CustomerAttendance/styles";
 
 interface PointInfosI {
   lat: number;
@@ -39,10 +41,21 @@ interface PointInfosI {
   lastChange: Date;
 }
 
+interface PointIdI {
+  pointId: number;
+}
+
 export function ServiceOrderCreation() {
   const navigate = useNavigate();
   const { recoverUserInformation } = useContext(AuthContext);
-  const { attendanceFormOfContext,resetAttendanceForm } = useContext(FormDataContext);
+  const {
+    setCurrentAttendanceForm,
+    resetAttendanceForm,
+    attendanceFormOfContext,
+  } = useContext(FormDataContext);
+
+  // const [osFormatedNumbers, setOsFormatedNumbers] = useState<PointIdI[]>([]);
+  const [descriptionOfTheRequest, setDescriptionOfTheRequest] = useState("");
 
   async function returnValidation() {
     await recoverUserInformation();
@@ -97,16 +110,33 @@ export function ServiceOrderCreation() {
   const [ServiceOrderCreated, setServiceOrderCreated] =
     useState<boolean>(false);
 
-  const handleServiceOrderCreated = () => {
+  async function handleServiceOrderCreated() {
+    const pointsArray: PointIdI[] = [];
+    selectedMarkers.forEach((number) => {
+      const newPointId = { pointId: number.serialNumber };
+      pointsArray.push(newPointId);
+    });
+    // setOsFormatedNumbers(pointsArray);
+
+    const { attendant, ...newCurrentObjectAttendanceForm } =
+      attendanceFormOfContext;
+    newCurrentObjectAttendanceForm.description = descriptionOfTheRequest;
+    newCurrentObjectAttendanceForm.os = pointsArray;
+    setCurrentAttendanceForm(newCurrentObjectAttendanceForm);
+    const returnCreatingAttendanceWithSO = await creatingAttendanceWithSO(
+      newCurrentObjectAttendanceForm
+    );
+    setCurrentAttendanceForm({...attendanceFormOfContext,attendanceProtocol:returnCreatingAttendanceWithSO.attendanceProtocol} )
+
     setServiceOrderCreated(true);
-  };
+  }
 
   const handleReturnToAttendance = () => {
     navigate("/luzes/home/atendimento");
   };
 
   const handleCancelingAttendance = () => {
-    resetAttendanceForm()
+    resetAttendanceForm();
     navigate("/luzes/home/atendimento");
   };
 
@@ -212,6 +242,8 @@ export function ServiceOrderCreation() {
               multiline
               maxRows={3}
               variant="standard"
+              onChange={(e) => setDescriptionOfTheRequest(e.target.value)}
+              value={descriptionOfTheRequest}
             />
           </section>
           <ContainerSubmitButtons id="ContainerSubmitButtons">
@@ -245,6 +277,6 @@ export function ServiceOrderCreation() {
       </ContentContainer>
     </ServiceSection>
   ) : (
-    ServiceOrderCreated && <PrintableProtocol />
+    ServiceOrderCreated && <PrintableProtocol serviceForm={attendanceFormOfContext} />
   );
 }

@@ -13,7 +13,7 @@ interface DropzoneSectionProps {
   setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
-const DropzoneSection: React.FC<DropzoneSectionProps> = ({
+export const DropzoneSection: React.FC<DropzoneSectionProps> = ({
   disabled,
   onDrop,
   attachedFiles,
@@ -67,4 +67,3 @@ const DropzoneSection: React.FC<DropzoneSectionProps> = ({
   );
 };
 
-export default DropzoneSection;
