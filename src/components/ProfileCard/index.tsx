@@ -14,7 +14,8 @@ import { useNavigate } from "react-router-dom";
 
 export function ProfileCard() {
   const navigate = useNavigate();
-  const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
+  const { user } = JSON.parse(localStorage.getItem("current_user") || '{"user": {}}');
+
   const [openState, setOpenState] = useState(false);
 
   const handleClickCardButton = () => setOpenState(!openState);

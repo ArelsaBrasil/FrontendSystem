@@ -4,9 +4,7 @@ import clips from "../../../assets/images/clips.png";
 import { MyModal } from "../../../components/MyModal";
 import { AuthContext } from "../../../context/AuthContext";
 import { FormDataContext } from "../../../context/FormDataContext";
-import {
-  finishAttendance
-} from "../../../services/formAttendance";
+import { finishAttendance } from "../../../services/FormAttendance";
 
 import {
   FormControl,
@@ -23,8 +21,6 @@ import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 
 import {
-  AtendimentoContainer,
-  AtendimentoSection,
   ButtonDeleteItem,
   ContainerLines,
   ContainerSubmitButtons,
@@ -33,10 +29,14 @@ import {
   StyledDropzone,
   SubmitButton,
   SubmitButtonFinishAndSend,
-  Title,
 } from "./styles";
 
 import { PrintableProtocol } from "../../../components/PrintableProtocol ";
+import {
+  ContainerOfPage,
+  SectionOfPage,
+  TitleOfPage,
+} from "../../../components/StylesPresentOnAllScreens/styles";
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -80,14 +80,26 @@ const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
 );
 
 export function CustomerAttendance() {
+  const navigate = useNavigate();
+  const { recoverUserInformation } = useContext(AuthContext);
+
+  async function returnValidation() {
+    await recoverUserInformation();
+    if (!recoverUserInformation) {
+      return navigate("/luzes");
+    }
+  }
+
+  useEffect(() => {
+    returnValidation();
+  }, []);
+
   const [selectedServiceOptions, setSelectedServiceOptions] = useState("");
   const [selectedServiceReasons, setSelectedServiceReasons] = useState("");
   const [valuesAreNotEmpty, setValuesAreNotEmpty] = useState(false);
   const [telephoneNumberFormated, setTelephoneNumberFormated] =
     useState<string>("");
 
-  const navigate = useNavigate();
-  const { recoverUserInformation } = useContext(AuthContext);
   const { attendanceFormOfContext, setCurrentAttendanceForm } =
     useContext(FormDataContext);
 
@@ -102,17 +114,6 @@ export function CustomerAttendance() {
 
   const [attendanceCreatedAndFinished, setAttendanceCreatedAndFinished] =
     useState<boolean>(false);
-
-  async function returnValidation() {
-    await recoverUserInformation();
-    if (!recoverUserInformation) {
-      return navigate("/luzes");
-    }
-  }
-
-  useEffect(() => {
-    returnValidation();
-  }, []);
 
   useEffect(() => {
     if (attendanceFormOfContext.attendanceProtocol != "") {
@@ -186,10 +187,10 @@ export function CustomerAttendance() {
 
   async function handleFinishAttendance(e: any) {
     e.preventDefault();
-    const {attendant ,...attendanceFormToSend} = attendanceForm
+    const { attendant, ...attendanceFormToSend } = attendanceForm;
     const { attendanceProtocol: newProtocolNumber } = await finishAttendance(
       attendanceFormToSend
-      );
+    );
     setAttendanceForm({
       ...attendanceForm,
       attendanceProtocol: newProtocolNumber,
@@ -207,9 +208,9 @@ export function CustomerAttendance() {
   }
 
   return !attendanceCreatedAndFinished ? (
-    <AtendimentoSection>
-      <AtendimentoContainer>
-        <Title> Registro de Atendimentos </Title>
+    <SectionOfPage>
+      <ContainerOfPage>
+        <TitleOfPage> Registro de Atendimentos </TitleOfPage>
         <ServiceForm>
           <ContainerLines>
             <section>
@@ -497,8 +498,8 @@ export function CustomerAttendance() {
             </SubmitButton>
           </ContainerSubmitButtons>
         </ServiceForm>
-      </AtendimentoContainer>
-    </AtendimentoSection>
+      </ContainerOfPage>
+    </SectionOfPage>
   ) : (
     <PrintableProtocol serviceForm={attendanceForm} />
   );

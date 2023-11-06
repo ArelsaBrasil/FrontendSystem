@@ -1,7 +1,4 @@
 import styled from "styled-components";
-interface PointDescriptionProps {
-  index: number;
-}
 
 export const AtendimentoSection = styled.div`
   width: 100%;
@@ -61,7 +58,6 @@ export const PointDescription = styled.div`
   &:hover {
     background-color: ${(props) => props.theme["gray-lists-hover"]};
     cursor: unset;
-   
   }
   & div:nth-child(1) {
     display: flex;

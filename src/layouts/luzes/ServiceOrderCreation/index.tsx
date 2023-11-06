@@ -28,8 +28,7 @@ import {
 import { isWithinInterval } from "date-fns";
 import { PrintableProtocol } from "../../../components/PrintableProtocol ";
 import { FormDataContext } from "../../../context/FormDataContext";
-import { creatingAttendanceWithSO } from "../../../services/formAttendance";
-import { ServiceForm } from "../CustomerAttendance/styles";
+import { creatingAttendanceWithSO } from "../../../services/FormAttendance";
 
 interface PointInfosI {
   lat: number;
@@ -126,7 +125,10 @@ export function ServiceOrderCreation() {
     const returnCreatingAttendanceWithSO = await creatingAttendanceWithSO(
       newCurrentObjectAttendanceForm
     );
-    setCurrentAttendanceForm({...attendanceFormOfContext,attendanceProtocol:returnCreatingAttendanceWithSO.attendanceProtocol} )
+    setCurrentAttendanceForm({
+      ...attendanceFormOfContext,
+      attendanceProtocol: returnCreatingAttendanceWithSO.attendanceProtocol,
+    });
 
     setServiceOrderCreated(true);
   }
@@ -277,6 +279,8 @@ export function ServiceOrderCreation() {
       </ContentContainer>
     </ServiceSection>
   ) : (
-    ServiceOrderCreated && <PrintableProtocol serviceForm={attendanceFormOfContext} />
+    ServiceOrderCreated && (
+      <PrintableProtocol serviceForm={attendanceFormOfContext} />
+    )
   );
 }

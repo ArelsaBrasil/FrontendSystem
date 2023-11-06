@@ -40,7 +40,8 @@ type ChildreType = {
 export const FormDataContext = createContext({} as FormDataContextI);
 
 export function FormDataProvider({ children }: ChildreType) {
-  const { user } = JSON.parse(localStorage.getItem("current_user") || "{}");
+  const { user } = JSON.parse(localStorage.getItem("current_user") || '{"user": {}}');
+
 
   const initialState: AttendanceFormI = {
     userCreator: "",
@@ -67,7 +68,7 @@ export function FormDataProvider({ children }: ChildreType) {
   attendanceFormOfContext.attendant == "" &&
     setAttendanceFormOfContext({
       ...attendanceFormOfContext,
-      attendant: user.name,
+      attendant: "teste",
     });
 
   function setCurrentAttendanceForm(currentForm: AttendanceFormI) {

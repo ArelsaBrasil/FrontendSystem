@@ -1,21 +1,5 @@
 import styled from "styled-components";
 
-export const AtendimentoSection = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-export const AtendimentoContainer = styled.div`
-  width: 80%;
-`;
-export const Title = styled.h1`
-  margin-left: 20px;
-  font-size: 32px;
-  color: #5f6377;
-  font-weight: normal;
-  margin-top: 30px;
-  margin-bottom: 30px;
-`;
 export const ServiceForm = styled.form`
   width: 100%;
   height: 100%;

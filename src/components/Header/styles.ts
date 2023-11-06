@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const HeaderSection = styled.header`
-  width: 100%;
   height: 100px;
+  overflow: hidden;
   background: linear-gradient(90deg, #00cf5a 0%, #30347d 99.48%);
 
   display: flex;
@@ -30,4 +30,3 @@ export const ProfileCardContainer = styled.div`
   padding-top: 15px;
   align-items: start;
 `;
-

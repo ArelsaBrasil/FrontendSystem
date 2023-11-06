@@ -29,6 +29,8 @@ export const PrintableProtocol: React.FC<IPrintableProtocolProps> = ({
     hour: "2-digit",
     minute: "2-digit",
   });
+  
+  const { attendanceFormOfContext } = useContext(FormDataContext);
 
   return (
     serviceForm && (
@@ -51,7 +53,8 @@ export const PrintableProtocol: React.FC<IPrintableProtocolProps> = ({
                 do nosso portal, acessando o link a seguir:
               </p>
               <a href="http://luzesdeacailandia.com.br/" target="_blank">
-                {`www.luzesdeacailandia.com.br/consulta-atendimento/${serviceForm.attendanceProtocol}`}
+                {`www.luzesdeacailandia.com.br/consulta-atendimento/
+              ${serviceForm.attendanceProtocol}`}
               </a>
               <p>Tembém é possivel ler o QR code ao lado:</p>
             </TextContainer>

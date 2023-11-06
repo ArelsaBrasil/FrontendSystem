@@ -1,3 +1,4 @@
+import { SearchScreen } from './layouts/luzes/SearchScreen/index';
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CustomerAttendance } from "./layouts/luzes/CustomerAttendance";
@@ -32,7 +33,7 @@ export function Router() {
             />
             <Route
               path="/luzes/home/pesquisa"
-              element={<ServiceOrderCreation />}
+              element={<SearchScreen/>}
             />
           </Route>
         </Routes>

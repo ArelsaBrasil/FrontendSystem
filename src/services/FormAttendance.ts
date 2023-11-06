@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api } from "./Api";
 import { IInitialState } from "../layouts/luzes/CustomerAttendance/index";
 
 export async function finishAttendance(data: IInitialState) {
