@@ -44,8 +44,7 @@ export const PrintableProtocol: React.FC<IPrintableProtocolProps> = ({
               <p>
                 O atendimento solicitado por <b> {serviceForm.customerName}</b>{" "}
                 em <b>{dataFormated}</b>, foi cadastrado em nosso sistema pelo
-                atendente <b> {serviceForm.attendant}</b> às{" "}
-                <b>{hourFormated}.</b>
+                atendente <b> {serviceForm.attendant}</b> às <b>{hourFormated}.</b>
               </p>
               <p>A Luzes de Açailandia agradesce seu contato.</p>
               <p>

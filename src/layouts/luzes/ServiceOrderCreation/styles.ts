@@ -4,6 +4,7 @@ interface PointDescriptionProps {
 }
 
 export const ServiceSection = styled.div`
+  padding-top: 165px;
   width: 100%;
   height: 100%;
 

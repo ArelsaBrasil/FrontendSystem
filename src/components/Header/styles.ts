@@ -1,8 +1,11 @@
 import styled from "styled-components";
 
 export const HeaderSection = styled.header`
+  position: fixed;
+  top: 0;
+  z-index: 3;
+  width: 100%;
   height: 100px;
-  overflow: hidden;
   background: linear-gradient(90deg, #00cf5a 0%, #30347d 99.48%);
 
   display: flex;
@@ -27,6 +30,5 @@ export const LogoBranco = styled.img`
 export const ProfileCardContainer = styled.div`
   height: 100%;
   display: flex;
-  padding-top: 15px;
-  align-items: start;
+  padding-top: 17px;
 `;

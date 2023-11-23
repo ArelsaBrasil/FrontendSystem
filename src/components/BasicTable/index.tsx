@@ -1,60 +1,79 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { IReturnSearchAndFilter } from "../TableOfSearchScreen";
+import TableContainer from "@mui/material/TableContainer";
 import { format } from "date-fns";
+import { Oval } from "react-loader-spinner";
+import { ItemsReturnSearchAndFilter } from "../../layouts/luzes/SearchScreen";
+import { ClosedIcon, OpenedIcon, TableRow } from "./styles";
 
-interface BasicTableProps {
-  resultSearchAndFilter: IReturnSearchAndFilter[];
+interface IBasicTable {
+  itemsReturned?: ItemsReturnSearchAndFilter[];
+  waitingTheSearch: boolean;
+  isLoading: boolean;
 }
 
-export function BasicTable({ resultSearchAndFilter }: BasicTableProps) {
+export function BasicTable({
+  itemsReturned,
+  isLoading,
+  waitingTheSearch,
+}: IBasicTable) {
   function formatingDate(dateToFormat: string) {
     const data = new Date(dateToFormat);
     return format(data, "dd/MM/yyyy");
   }
 
+  function statusIconSorting(status: String) {
+    if (Number(status) == 0) {
+      return (
+        <ClosedIcon>
+          <div />
+          <p>Solucionado</p>
+        </ClosedIcon>
+      );
+    }
+    return (
+      <OpenedIcon>
+        <div />
+        <p>Aberto</p>
+      </OpenedIcon>
+    );
+  }
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: 'bold' }}>Número de protocolo</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Nome</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Data da solicitação</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Motivo solicitação</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Meio de contato</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Cargo(g)</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Telefone</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Email</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {resultSearchAndFilter.map((data) => (
-            <TableRow
-              key={Number(data.attendanceProtocol)}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {data.attendanceProtocol}
-              </TableCell>
-              <TableCell >{data.customerName}</TableCell>
-              <TableCell>{formatingDate(data.createdAt.toString())}</TableCell>
-              <TableCell>{data.reason}</TableCell>
-              <TableCell>{data.status}</TableCell>
-              <TableCell>{data.meansOfAttendance}</TableCell>
-              <TableCell>{data.customerPosition}</TableCell>
-              <TableCell>{data.customerPhoneNumber}</TableCell>
-              <TableCell>{data.customerEmail}</TableCell>
+    <>
+      <TableContainer component={Paper}>
+        {itemsReturned &&
+          !waitingTheSearch &&
+          itemsReturned.map((data, i) => (
+            <TableRow key={i}>
+              <p>{i + 1}</p>
+              <p>{data.attendanceProtocol}</p>
+              <p>{data.customerName}</p>
+              <p>{data.customerPosition}</p>
+              <p>{formatingDate(data.createdAt.toString())}</p>
+              <p>{data.reason}</p>
+              <div>{statusIconSorting(data.status)}</div>
+              <p>{data.meansOfAttendance}</p>
+              <p>{data.customerPhoneNumber}</p>
+              <p>{data.customerEmail}</p>
             </TableRow>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      </TableContainer>
+      {isLoading && (
+        <div style={{ marginTop: "30px" }}>
+          <Oval
+            height={50}
+            width={50}
+            color="#00A24F"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor="#00a24e83"
+            strokeWidth={5}
+            strokeWidthSecondary={5}
+          />
+        </div>
+      )}
+    </>
   );
 }

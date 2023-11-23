@@ -1,11 +1,11 @@
-import { IDataToSearch } from "../components/TableOfSearchScreen";
+import { IDataToSearch } from "../layouts/luzes/SearchScreen";
 import { api } from "./Api";
 
 export async function searchAndFilter(dataToSearch: IDataToSearch) {
-  const { wordToSearch, status, startDate ,endDate} = dataToSearch;
+  const { wordToSearch, status, startDate ,endDate,page} = dataToSearch;
   try {
     const response = await api.get(
-      `buscando-atendimentos?wordToSearch=${wordToSearch}&status=${status}&startDate=${startDate}&endDate=${endDate}`
+      `buscando-atendimentos?wordToSearch=${wordToSearch}&status=${status}&startDate=${startDate}&endDate=${endDate}&page=${page}`
     );
     return response.data;
   } catch (error) {

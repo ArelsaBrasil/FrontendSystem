@@ -8,9 +8,7 @@ export const Card = styled.div<CardProps>`
   width: 200px;
   background: white;
   border-radius: 22px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
+
   padding: 8px;
   height: ${({ isOpenState }) => (isOpenState ? "105px" : "64px")};
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);

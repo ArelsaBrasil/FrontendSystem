@@ -53,7 +53,6 @@ export function ServiceOrderCreation() {
     attendanceFormOfContext,
   } = useContext(FormDataContext);
 
-  // const [osFormatedNumbers, setOsFormatedNumbers] = useState<PointIdI[]>([]);
   const [descriptionOfTheRequest, setDescriptionOfTheRequest] = useState("");
 
   async function returnValidation() {
