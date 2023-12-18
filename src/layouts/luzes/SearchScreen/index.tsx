@@ -1,5 +1,6 @@
-import { Button, SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
 import { HeaderSearchScreen } from "../../../components/HeaderSearchScreen";
 import {
@@ -11,40 +12,12 @@ import { TableOfSearchScreen } from "../../../components/TableOfSearchScreen";
 import { AuthContext } from "../../../context/AuthContext";
 import { searchAndFilter } from "../../../services/SearchAndFilter";
 import { NothingFound } from "./styles";
-import { useInView } from "react-intersection-observer";
-
-export interface ItemsReturnSearchAndFilter {
-  idAttendance: Number;
-  meansOfAttendance: String;
-  attendanceProtocol: String;
-  reason: String;
-  customerName: String;
-  customerEmail: String;
-  customerPhoneNumber: String;
-  customerPosition: String;
-  poleId: String;
-  requestDescription: String;
-  status: String;
-  createdAt: String;
-}
-
-export interface IResultSearchAndFilter {
-  items: ItemsReturnSearchAndFilter[];
-  pagination: {
-    page: number;
-    pageSize: number;
-    totalItems: number;
-    totalPages: number;
-  };
-}
-
-export interface IDataToSearch {
-  wordToSearch: string;
-  status: string;
-  startDate: string | null;
-  endDate: string | null;
-  page: number;
-}
+import {
+  IDataToSearch,
+  IItemsReturnSearchAndFilter,
+  IObjSortInfos,
+  IResultSearchAndFilter
+} from "./type";
 
 export function SearchScreen() {
   const navigate = useNavigate();
@@ -60,12 +33,11 @@ export function SearchScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [moreToLoad, setMoretoLoad] = useState<boolean>(true);
   const [waitingTheSearch, setWaitingTheSearch] = useState<boolean>(false);
-  const [totalPagesToLoad, setTotalPagesToLoad] = useState<number>(0);
 
   const [resultSearchAndFilter, setResultSearchAndFilter] =
     useState<IResultSearchAndFilter>();
   const [itemsReturned, setItemsReturned] = useState<
-    ItemsReturnSearchAndFilter[]
+    IItemsReturnSearchAndFilter[]
   >([]);
 
   const [dataToSearch, setDataToSearch] = useState<IDataToSearch>({
@@ -74,7 +46,13 @@ export function SearchScreen() {
     startDate: "",
     endDate: "",
     page: 1,
+    sortInfos: {createdAt:"desc"},
   });
+
+  const handleSort = (objSortInfos:IObjSortInfos) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    fetchDataButton(objSortInfos);
+  };
 
   const handleStatusChange = (e: SelectChangeEvent) => {
     setDataToSearch({ ...dataToSearch, status: e.target.value as string });
@@ -96,8 +74,6 @@ export function SearchScreen() {
     setTimeout(async () => {
       const returnSearchAndFilter = await searchAndFilter(dataToSearch);
 
-      setTotalPagesToLoad(returnSearchAndFilter.pagination.totalPages);
-
       if (returnSearchAndFilter) {
         setResultSearchAndFilter(returnSearchAndFilter);
 
@@ -115,19 +91,20 @@ export function SearchScreen() {
         }
         setIsLoading(false);
       }
-    }, 2000);
+    }, 1000);
   }
 
-  async function fetchDataButton() {
+  async function fetchDataButton(objSortInfos?:IObjSortInfos) {
     dataToSearch.page = 1;
-    console.log(dataToSearch);
+    if (objSortInfos) {
+      dataToSearch.sortInfos = objSortInfos;
+    }
+
     setIsLoading(true);
     setWaitingTheSearch(true);
 
     setTimeout(async () => {
       const returnSearchAndFilter = await searchAndFilter(dataToSearch);
-
-      setTotalPagesToLoad(returnSearchAndFilter.pagination.totalPages);
 
       if (returnSearchAndFilter) {
         setResultSearchAndFilter(returnSearchAndFilter);
@@ -150,7 +127,7 @@ export function SearchScreen() {
         setIsLoading(false);
         setWaitingTheSearch(false);
       }
-    }, 2000);
+    }, 1000);
   }
 
   async function handleSubmitSearchAndFilter() {
@@ -180,11 +157,12 @@ export function SearchScreen() {
       <TitleOfPage> Pesquisa de Atendimentos </TitleOfPage>
       <ContainerOfPage>
         <HeaderSearchScreen
+          handleSort={handleSort}
           handleStatusChange={handleStatusChange}
           handleSetDataToSearch={handleSetDataToSearch}
           dataToSearch={dataToSearch}
           handleSubmitSearchAndFilter={handleSubmitSearchAndFilter}
-          quantityOfItems={resultSearchAndFilter?.pagination.totalItems}
+          paginationInfos={resultSearchAndFilter?.pagination}
         />
         <TableOfSearchScreen
           isLoading={isLoading}

@@ -2,11 +2,12 @@ import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import { format } from "date-fns";
 import { Oval } from "react-loader-spinner";
-import { ItemsReturnSearchAndFilter } from "../../layouts/luzes/SearchScreen";
-import { ClosedIcon, OpenedIcon, TableRow } from "./styles";
+import { StatusIconSorting } from "../StatusIconSorting";
+import { TableRow } from "./styles";
+import { IItemsReturnSearchAndFilter } from "../../layouts/luzes/SearchScreen/type";
 
 interface IBasicTable {
-  itemsReturned?: ItemsReturnSearchAndFilter[];
+  itemsReturned?: IItemsReturnSearchAndFilter[];
   waitingTheSearch: boolean;
   isLoading: boolean;
 }
@@ -21,23 +22,6 @@ export function BasicTable({
     return format(data, "dd/MM/yyyy");
   }
 
-  function statusIconSorting(status: String) {
-    if (Number(status) == 0) {
-      return (
-        <ClosedIcon>
-          <div />
-          <p>Solucionado</p>
-        </ClosedIcon>
-      );
-    }
-    return (
-      <OpenedIcon>
-        <div />
-        <p>Aberto</p>
-      </OpenedIcon>
-    );
-  }
-
   return (
     <>
       <TableContainer component={Paper}>
@@ -45,13 +29,15 @@ export function BasicTable({
           !waitingTheSearch &&
           itemsReturned.map((data, i) => (
             <TableRow key={i}>
-              <p>{i + 1}</p>
+              {/* <p>{i + 1}</p> */}
               <p>{data.attendanceProtocol}</p>
               <p>{data.customerName}</p>
               <p>{data.customerPosition}</p>
               <p>{formatingDate(data.createdAt.toString())}</p>
               <p>{data.reason}</p>
-              <div>{statusIconSorting(data.status)}</div>
+              <div>
+                <StatusIconSorting status={data.status} />
+              </div>
               <p>{data.meansOfAttendance}</p>
               <p>{data.customerPhoneNumber}</p>
               <p>{data.customerEmail}</p>

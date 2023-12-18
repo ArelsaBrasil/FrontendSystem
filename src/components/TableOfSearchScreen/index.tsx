@@ -1,13 +1,12 @@
 import { TableContainer, TableRenderContainer } from "./styles";
 
-import { ItemsReturnSearchAndFilter } from "../../layouts/luzes/SearchScreen";
 import { BasicTable } from "../BasicTable";
-import { BallTriangle, Oval } from "react-loader-spinner";
+import { IItemsReturnSearchAndFilter } from "../../layouts/luzes/SearchScreen/type";
 
 interface ITableOfSearchScreenProps {
   isLoading: boolean;
   waitingTheSearch: boolean;
-  itemsReturned?: ItemsReturnSearchAndFilter[];
+  itemsReturned?: IItemsReturnSearchAndFilter[];
 }
 
 export function TableOfSearchScreen({

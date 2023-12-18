@@ -10,6 +10,7 @@ import { Ase } from "./pages/Ase";
 import { Luzes } from "./pages/Luzes";
 import { LuzesHome } from "./pages/LuzesHome";
 import { FormDataProvider } from "./context/FormDataContext";
+import { OrganizingGroupScreen } from './layouts/luzes/OrganizingGroupScreen';
 
 export function Router() {
   return (
@@ -29,11 +30,15 @@ export function Router() {
             />
             <Route
               path="/luzes/home/geracaoos"
-              element={<ServiceOrderCreation />}
+              element={<ServiceOrderCreation />} 
             />
             <Route
               path="/luzes/home/pesquisa"
               element={<SearchScreen/>}
+            />
+            <Route
+              path="/luzes/home/organizar-equipes"
+              element={<OrganizingGroupScreen/>}
             />
           </Route>
         </Routes>

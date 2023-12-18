@@ -9,28 +9,20 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import useScrollListener from "../../hooks/useScrollListener";
-import { IDataToSearch } from "../../layouts/luzes/SearchScreen";
 import { SortButton } from "../Sort Button";
-
-interface IHeaderSearchScreen {
-  handleSubmitSearchAndFilter: () => void;
-  handleStatusChange: (e: SelectChangeEvent) => void;
-  handleSetDataToSearch: (value: string | unknown, attribute: string) => void;
-  dataToSearch: IDataToSearch;
-  quantityOfItems?: number;
-}
+import { IHeaderSearchScreen } from "./type";
 
 export function HeaderSearchScreen({
   handleSubmitSearchAndFilter,
   handleStatusChange,
-  dataToSearch,
   handleSetDataToSearch,
-  quantityOfItems,
+  handleSort,
+  dataToSearch,
+  paginationInfos,
 }: IHeaderSearchScreen) {
   const [navClassList, setNavClassList] = useState<string[]>([]);
   const scroll = useScrollListener();
@@ -48,7 +40,7 @@ export function HeaderSearchScreen({
     <Header className={navClassList.join(" ")}>
       <form onSubmit={handleSubmitSearchAndFilter}>
         <div>
-          <p>Total: {quantityOfItems}</p>
+          <p>Total: {paginationInfos?.totalItems}</p>
         </div>
         <TextField
           id="outlined-basic"
@@ -118,15 +110,7 @@ export function HeaderSearchScreen({
         </Button>
       </form>
       <ColumnTitles>
-        <SortButton>Protocolo</SortButton>
-        <SortButton>Nome</SortButton>
-        <SortButton>Cargo</SortButton>
-        <SortButton>Data</SortButton>
-        <SortButton>Motivo solicitação</SortButton>
-        <SortButton>Status</SortButton>
-        <SortButton>Meio </SortButton>
-        <SortButton>Telefone</SortButton>
-        <SortButton>Email</SortButton>
+        <SortButton handleSort={handleSort} />
       </ColumnTitles>
     </Header>
   );

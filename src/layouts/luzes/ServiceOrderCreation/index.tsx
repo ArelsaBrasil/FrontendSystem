@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { X } from "phosphor-react";
+import { X } from "@phosphor-icons/react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Map } from "../../../components/Map";

@@ -1,4 +1,4 @@
-import { CaretDown, CaretUp } from "phosphor-react";
+import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { useState } from "react";
 import Avatarjoao from "../../assets/images/Avatarjoao.jpg";
 import {

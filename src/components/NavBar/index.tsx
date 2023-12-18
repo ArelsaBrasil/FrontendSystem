@@ -11,6 +11,7 @@ export function NavBar() {
           Criar Atendimento
         </StyledNavLink>
         <StyledNavLink to="/luzes/home/pesquisa">Pesquisar</StyledNavLink>
+        <StyledNavLink to="/luzes/home/organizar-equipes">Organizar Equipes</StyledNavLink>
       </nav>
     </NavBarContainer>
   );

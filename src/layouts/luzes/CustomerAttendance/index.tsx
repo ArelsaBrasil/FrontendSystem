@@ -16,7 +16,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { FileArrowUp, X } from "phosphor-react";
+import { FileArrowUp, X } from "@phosphor-icons/react";
 import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 

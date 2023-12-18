@@ -1,10 +1,7 @@
 import { nanoid } from "nanoid";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
+  useState
 } from "react";
 
 interface PointIdI {

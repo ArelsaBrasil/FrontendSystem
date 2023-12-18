@@ -7,12 +7,14 @@ export const SectionOfPage = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 160px;
+  padding-bottom: 160px;
 `;
 export const ContainerOfPage = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
 `;
 export const TitleOfPage = styled.h1`
   margin: 30px 0;
