@@ -12,6 +12,7 @@ export function NavBar() {
         </StyledNavLink>
         <StyledNavLink to="/luzes/home/pesquisa">Pesquisar</StyledNavLink>
         <StyledNavLink to="/luzes/home/organizar-equipes">Organizar Equipes</StyledNavLink>
+        <StyledNavLink to="/luzes/home/designar-os">Designar OS</StyledNavLink>
       </nav>
     </NavBarContainer>
   );

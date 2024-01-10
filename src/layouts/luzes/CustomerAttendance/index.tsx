@@ -4,7 +4,7 @@ import clips from "../../../assets/images/clips.png";
 import { MyModal } from "../../../components/MyModal";
 import { AuthContext } from "../../../context/AuthContext";
 import { FormDataContext } from "../../../context/FormDataContext";
-import { finishAttendance } from "../../../services/FormAttendance";
+import { finishAttendance } from "../../../api/FormAttendance";
 
 import {
   FormControl,

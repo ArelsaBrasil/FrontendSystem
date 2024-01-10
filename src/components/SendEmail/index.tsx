@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { FormDataContext } from "../../context/FormDataContext";
-import { sendEmailProtocol } from "../../services/FormAttendance";
+import { sendEmailProtocol } from "../../api/FormAttendance";
 import { SendEmailButton, SendEmailButtonBlock } from "./styles";
 
 export const SendEmail = ({ serviceForm }: any) => {

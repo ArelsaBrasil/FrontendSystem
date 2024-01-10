@@ -65,7 +65,7 @@ export function FormDataProvider({ children }: ChildreType) {
   attendanceFormOfContext.attendant == "" &&
     setAttendanceFormOfContext({
       ...attendanceFormOfContext,
-      attendant: "teste",
+      attendant: user.userName,
     });
 
   function setCurrentAttendanceForm(currentForm: AttendanceFormI) {

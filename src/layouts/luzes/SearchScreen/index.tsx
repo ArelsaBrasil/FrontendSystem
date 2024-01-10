@@ -10,7 +10,7 @@ import {
 } from "../../../components/StylesPresentOnAllScreens/styles";
 import { TableOfSearchScreen } from "../../../components/TableOfSearchScreen";
 import { AuthContext } from "../../../context/AuthContext";
-import { searchAndFilter } from "../../../services/SearchAndFilter";
+import { searchAndFilter } from "../../../api/SearchAndFilter";
 import { NothingFound } from "./styles";
 import {
   IDataToSearch,

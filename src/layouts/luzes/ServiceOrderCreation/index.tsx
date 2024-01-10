@@ -28,17 +28,19 @@ import {
 import { isWithinInterval } from "date-fns";
 import { PrintableProtocol } from "../../../components/PrintableProtocol ";
 import { FormDataContext } from "../../../context/FormDataContext";
-import { creatingAttendanceWithSO } from "../../../services/FormAttendance";
+import { creatingAttendanceWithSO } from "../../../api/FormAttendance";
 
-interface PointInfosI {
+type TPointInfos = {
   lat: number;
   lng: number;
   address: string;
-  power: string;
   model: string;
   serialNumber: number;
-  lastChange: Date;
-}
+  lastChange: Date | null;
+  createdAt: Date;
+  id: number;
+};
+//
 
 interface PointIdI {
   pointId: number;
@@ -71,17 +73,17 @@ export function ServiceOrderCreation() {
     setSelectedMarkers(updatedMarkers);
   };
 
-  const [selectedMarkers, setSelectedMarkers] = useState<PointInfosI[]>([]);
+  const [selectedMarkers, setSelectedMarkers] = useState<TPointInfos[]>([]);
 
-  const handleMarkerClick = (pointData: PointInfosI) => {
+  const handleMarkerClick = (pointData: TPointInfos) => {
     if (
       selectedMarkers.some(
-        (point) => point.serialNumber === pointData.serialNumber
+        (point) => point.id === pointData.id
       )
     ) {
       setSelectedMarkers(
         selectedMarkers.filter(
-          (point) => point.serialNumber !== pointData.serialNumber
+          (point) => point.id !== pointData.id
         )
       );
     } else {
@@ -111,10 +113,9 @@ export function ServiceOrderCreation() {
   async function handleServiceOrderCreated() {
     const pointsArray: PointIdI[] = [];
     selectedMarkers.forEach((number) => {
-      const newPointId = { pointId: number.serialNumber };
+      const newPointId = { pointId: number.id };
       pointsArray.push(newPointId);
     });
-    // setOsFormatedNumbers(pointsArray);
 
     const { attendant, ...newCurrentObjectAttendanceForm } =
       attendanceFormOfContext;
@@ -161,17 +162,19 @@ export function ServiceOrderCreation() {
           )}
           <section>
             {selectedMarkers.map(
-              ({ address, serialNumber, lat, lng, lastChange }, index) => {
-                const formattedDate = lastChange.toLocaleDateString("pt-BR", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                });
+              ({ address, id, lat, lng, lastChange }, index) => {
+                const formattedDate =
+                  lastChange &&
+                  lastChange.toLocaleDateString("pt-BR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  });
                 return (
                   <PointDescription
                     key={index}
                     // onClick={() => setCenterPosition({ lat, lng })}
-                    onMouseOver={() => setHoverMarkerId(serialNumber)}
+                    onMouseOver={() => setHoverMarkerId(id)}
                     onMouseLeave={() => setHoverMarkerId(null)}
                   >
                     <PointContainer
@@ -179,6 +182,7 @@ export function ServiceOrderCreation() {
                     >
                       <IdentifierNumber
                         as={
+                          lastChange &&
                           isWithinInterval(lastChange, {
                             start: new Date(
                               currentDate.getTime() - 15 * 24 * 60 * 60 * 1000
@@ -193,12 +197,13 @@ export function ServiceOrderCreation() {
                       </IdentifierNumber>
                       <ContainerInfos>
                         <InfosOfPoint>
-                          {`#${serialNumber} (Lat: ${lat}, Long: ${lng}) `}
+                          {`#${id} (Lat: ${lat}, Long: ${lng}) `}
                         </InfosOfPoint>
                         <Address>{`${address}`}</Address>
 
                         <LastChangeDate>
-                          {isWithinInterval(lastChange, {
+                          {lastChange &&
+                          isWithinInterval(lastChange, {
                             start: new Date(
                               currentDate.getTime() - 15 * 24 * 60 * 60 * 1000
                             ),
@@ -220,11 +225,16 @@ export function ServiceOrderCreation() {
               }
             )}
           </section>
-          {selectedMarkers.some((point) =>
-            isWithinInterval(point.lastChange, {
-              start: new Date(currentDate.getTime() - 15 * 24 * 60 * 60 * 1000),
-              end: currentDate,
-            })
+
+          {selectedMarkers.some(
+            (point) =>
+              point.lastChange &&
+              isWithinInterval(point.lastChange, {
+                start: new Date(
+                  currentDate.getTime() - 15 * 24 * 60 * 60 * 1000
+                ),
+                end: currentDate,
+              })
           ) && (
             <WarningSection>
               <p>

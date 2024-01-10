@@ -16,7 +16,7 @@ import {
 } from "./styles";
 import { useState } from "react";
 import { CreatedCard } from "../CreatedCard";
-import { DefiningNewGroups } from "../../../services/DefiningNewGroups";
+import { DefiningNewGroups } from "../../../api/DefiningNewGroups";
 
 const nomes = [
   "Antonio",

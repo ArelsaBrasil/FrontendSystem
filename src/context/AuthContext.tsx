@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../services/Api";
-import { signInRequest, validateCurrentUser } from "../services/Auth";
+import { api } from "../api/Api";
+import { signInRequest, validateCurrentUser } from "../api/Auth";
 type SignInData = {
   userName: string;
   password: string;

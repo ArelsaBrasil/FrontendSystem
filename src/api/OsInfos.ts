@@ -1,8 +1,8 @@
 import { api } from "./Api";
 
-export async function CurrengGroups() {
+export async function OsInfos() {
   try {
-    const response = await api.get(`buscando-equipe-vigente`);
+    const response = await api.get(`osinfos`);
     return response.data;
   } catch (error) {
     throw new Error("Operação não efetuada com sucesso. ");

@@ -5,29 +5,9 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { useEffect, useRef, useState } from "react";
+import { OsInfos } from "../../../api/OsInfos";
 import { MapContainer, MapContent } from "./styles";
-import { PointsService } from "../../api/PointsService";
-
-type TPointInfos = {
-  lat: number;
-  lng: number;
-  address: string;
-  model: string;
-  serialNumber: number;
-  lastChange: Date | null;
-  createdAt: Date;
-  id: number;
-};
-
-interface MapI {
-  onMarkerClick: (pointData: TPointInfos) => void;
-  selectedMarkers: TPointInfos[];
-  hoverMarkerId: null | number;
-  centerPosition?: {
-    lat: number;
-    lng: number;
-  };
-}
+import { ApiResponse, IMap, TPointInfos } from "./types";
 
 const blueCircle =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Circulo_azul.png/600px-Circulo_azul.png?20200319115844";
@@ -70,23 +50,39 @@ const optionsCluster = {
   ],
 };
 
-export function Map({
+export function MapOfDesignationScreen({
   onMarkerClick,
   selectedMarkers,
   hoverMarkerId,
   centerPosition,
-}: MapI) {
+}: IMap) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyC6yhQbZldZk3535d-bgJiaR3mus98dtcw",
   });
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const [points, setPoints] = useState<TPointInfos[] | null>([]);
+  const [osInfos, setosInfos] = useState<ApiResponse[] | null>([]);
 
   useEffect(() => {
-    PointsService.getAllPoints().then((allMarkers) => {
-      setPoints(allMarkers);
-    });
+    async function fetchDataAndSetPoints() {
+      try {
+        const returnOsInfos = await OsInfos();
+        console.log(returnOsInfos);
+        setosInfos(returnOsInfos);
+        if (returnOsInfos) {
+          const extractedPoints = returnOsInfos.map(
+            (osInfo: { pointId: ApiResponse }) => osInfo.pointId
+          );
+
+          setPoints(extractedPoints);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar informações:", error as any);
+      }
+    }
+
+    fetchDataAndSetPoints();
   }, []);
 
   useEffect(() => {
@@ -102,8 +98,11 @@ export function Map({
     handleCenterPositionChange();
   }, [centerPosition]);
 
-  const handleMarkerClick = (point: TPointInfos) => {
-    onMarkerClick(point);
+  const handleMarkerClick = (pointInfos: TPointInfos) => {
+    const osIdOfPoint =
+      osInfos && osInfos.find((osInfo) => osInfo.pointId.id === pointInfos.id);
+      pointInfos.osInfo = osIdOfPoint
+     onMarkerClick(pointInfos);
   };
 
   const handleMapLoad = (map: google.maps.Map) => {

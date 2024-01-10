@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, ContainerCurrentFormationStaff, CardContainer } from "./styles";
-import { searchAndFilter } from "../../../services/SearchAndFilter";
-import { CurrengGroups } from "../../../services/CurrengGroups";
+import { searchAndFilter } from "../../../api/SearchAndFilter";
+import { CurrentGroups } from "../../../api/CurrentGroups";
 
 interface Group {
   groupName: string;
@@ -17,7 +17,7 @@ export function CurrentGroupFormation() {
   }, []);
 
   async function fetchData() {
-    const currentGroupReturn = await CurrengGroups();
+    const currentGroupReturn = await CurrentGroups();
 
     if (currentGroupReturn) {
       setCurrentGroup(currentGroupReturn);

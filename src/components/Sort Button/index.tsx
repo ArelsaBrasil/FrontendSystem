@@ -91,7 +91,6 @@ export function SortButton({ handleSort }: ISorSortButton) {
         paramsToSend[nameToSort] = aux;
       }
 
-      console.log(paramsToSend);
       handleSort(paramsToSend);
       setSelectedButton((prevState) => [...prevState, buttonName]);
     }

@@ -12,7 +12,7 @@ export const ButtonReturn = styled.button`
   display: flex;
   align-items: flex-start;
   background-color: transparent;
-  cursor:pointer;
+  cursor: pointer;
 `;
 export const SucessSection = styled.div`
   width: 100vw;
@@ -21,6 +21,7 @@ export const SucessSection = styled.div`
   align-items: center;
 `;
 export const SucessContainer = styled.div`
+  padding-top: 100px;
   width: 60%;
   display: flex;
   flex-direction: column;

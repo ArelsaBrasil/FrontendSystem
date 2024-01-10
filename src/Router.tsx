@@ -1,4 +1,4 @@
-import { SearchScreen } from './layouts/luzes/SearchScreen/index';
+import { SearchScreen } from "./layouts/luzes/SearchScreen/index";
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CustomerAttendance } from "./layouts/luzes/CustomerAttendance";
@@ -10,7 +10,8 @@ import { Ase } from "./pages/Ase";
 import { Luzes } from "./pages/Luzes";
 import { LuzesHome } from "./pages/LuzesHome";
 import { FormDataProvider } from "./context/FormDataContext";
-import { OrganizingGroupScreen } from './layouts/luzes/OrganizingGroupScreen';
+import { OrganizingGroupScreen } from "./layouts/luzes/OrganizingGroupScreen";
+import { DesignateOSScreen } from "./layouts/luzes/DesignateOSScreen";
 
 export function Router() {
   return (
@@ -30,15 +31,16 @@ export function Router() {
             />
             <Route
               path="/luzes/home/geracaoos"
-              element={<ServiceOrderCreation />} 
+              element={<ServiceOrderCreation />}
             />
-            <Route
-              path="/luzes/home/pesquisa"
-              element={<SearchScreen/>}
-            />
+            <Route path="/luzes/home/pesquisa" element={<SearchScreen />} />
             <Route
               path="/luzes/home/organizar-equipes"
-              element={<OrganizingGroupScreen/>}
+              element={<OrganizingGroupScreen />}
+            />
+            <Route
+              path="/luzes/home/designar-os"
+              element={<DesignateOSScreen />}
             />
           </Route>
         </Routes>
