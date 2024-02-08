@@ -11,6 +11,7 @@ import {
   ContentContainer,
   ContentSection,
   IdentifierNumber,
+  IndexContainer,
   InfosOfPoint,
   MapsContainer,
   PointContainer,
@@ -24,19 +25,29 @@ import { CurrentGroups } from "../../../api/CurrentGroups";
 import { SendDesignationOS } from "../../../api/SendDesignationOS";
 import { MapOfDesignationScreen } from "../MapOfDesignationScreen";
 import { TChosenMarker, TGroup } from "./types";
-import { TPointInfos } from "../MapOfDesignationScreen/types";
+import { ApiResponse, TPointInfos } from "../MapOfDesignationScreen/types";
+import { MarkerIndex } from "../MarkerIndex";
+import { OsInfos } from "../../../api/OsInfos";
 
 export function DesignateOS() {
   const [currentGroup, setCurrentGroup] = useState<TGroup[]>([]);
+  const [osInfos, setOsInfos] = useState<ApiResponse[] | null>([]);
+  const [selectedMarkers, setSelectedMarkers] = useState<TPointInfos[]>([]);
+
   useEffect(() => {
     fetchData();
   }, []);
 
   async function fetchData() {
     const currentGroupReturn = await CurrentGroups();
+    const osInfosReturn = await OsInfos();
 
     if (currentGroupReturn) {
       setCurrentGroup(currentGroupReturn);
+    }
+
+    if (osInfosReturn) {
+      setOsInfos(osInfosReturn);
     }
   }
 
@@ -59,9 +70,8 @@ export function DesignateOS() {
     setSelectedMarkers(updatedMarkers);
   };
 
-  const [selectedMarkers, setSelectedMarkers] = useState<TPointInfos[]>([]);
-
   const handleMarkerClick = (pointData: TPointInfos) => {
+    console.log(pointData);
     if (selectedMarkers.some((point) => point.id === pointData.id)) {
       setSelectedMarkers(
         selectedMarkers.filter((point) => point.id !== pointData.id)
@@ -92,8 +102,6 @@ export function DesignateOS() {
     pointId: number,
     osId: number
   ) => {
-    console.log("groupName:", groupName, "pointId:", pointId, "osId:", osId);
-
     const existingPointIndex = selectedPoints.findIndex(
       (point) => point.pointId === pointId
     );
@@ -115,10 +123,25 @@ export function DesignateOS() {
   };
 
   async function handleAssing() {
-    const dataToLink = selectedPoints.map(({pointId,...rest}) => (rest));
+    const dataToLink = selectedPoints.map(({ pointId, ...rest }) => rest);
 
     await SendDesignationOS(dataToLink);
+
+    window.location.reload();
   }
+
+  const [allGroupsChosen, setAllGroupsChosen] = useState(false);
+
+  useEffect(() => {
+    const areAllGroupsChosen = selectedMarkers.every((marker) => {
+      const selectedPoint = selectedPoints.find(
+        (point) => point.pointId === marker.id
+      );
+      return selectedPoint?.groupName !== undefined;
+    });
+
+    setAllGroupsChosen(areAllGroupsChosen);
+  }, [selectedMarkers, selectedPoints]);
 
   return (
     <ServiceSection>
@@ -135,23 +158,25 @@ export function DesignateOS() {
           <Title> Designar Ordem de Serviço. </Title>
           {selectedMarkers.length === 0 && (
             <section>
-              <p>Selecione o ponto desejado no mapa ao lado esquerdo.</p>
+              <p> - Selecione o ponto desejado no mapa ao lado esquerdo.</p>
             </section>
           )}
           <section>
             {selectedMarkers.map(
               ({ address, id, osInfo, lat, lng, lastChange }, index) => {
-                const formattedDate =
-                  lastChange &&
-                  lastChange.toLocaleDateString("pt-BR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  });
+                // const formattedDate =
+                //   lastChange &&
+                //   lastChange.toLocaleDateString("pt-BR", {
+                //     year: "numeric",
+                //     month: "long",
+                //     day: "numeric",
+                //   });
                 return (
                   <PointDescription
                     key={index}
-                    onClick={() => setCenterPosition({ lat, lng })}
+                    onClick={() =>
+                      setCenterPosition({ lat: Number(lat), lng: Number(lng) })
+                    }
                     onMouseOver={() => setHoverMarkerId(id)}
                     onMouseLeave={() => setHoverMarkerId(null)}
                   >
@@ -218,12 +243,13 @@ export function DesignateOS() {
             <SubmitButton
               type="submit"
               onClick={handleAssing}
-              disabled={selectedMarkers.length === 0}
+              disabled={selectedMarkers.length === 0 || !allGroupsChosen}
             >
               atribuir
             </SubmitButton>
           </ContainerSubmitButtons>
         </ContentSection>
+        <MarkerIndex />
       </ContentContainer>
     </ServiceSection>
   );

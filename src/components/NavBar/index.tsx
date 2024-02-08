@@ -11,8 +11,14 @@ export function NavBar() {
           Criar Atendimento
         </StyledNavLink>
         <StyledNavLink to="/luzes/home/pesquisa">Pesquisar</StyledNavLink>
-        <StyledNavLink to="/luzes/home/organizar-equipes">Organizar Equipes</StyledNavLink>
+        <StyledNavLink to="/luzes/home/organizar-equipes">
+          Organizar Equipes
+        </StyledNavLink>
         <StyledNavLink to="/luzes/home/designar-os">Designar OS</StyledNavLink>
+        <StyledNavLink to="/luzes/home/os">Ordem de Serviço</StyledNavLink>
+        <StyledNavLink to="/luzes/home/criacao-usuario">
+          Criação de Usuários
+        </StyledNavLink>
       </nav>
     </NavBarContainer>
   );

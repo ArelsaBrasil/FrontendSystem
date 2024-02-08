@@ -22,7 +22,9 @@ export const MapsContainer = styled.div`
 
 export const ContentContainer = styled.div`
   width: 41%;
-
+  display: flex;
+  flex-direction: column;
+justify-content: space-between;
   flex-grow: 1;
   padding-left: 38px;
   max-height: calc(100vh - 165px);
@@ -242,4 +244,22 @@ export const ContainerButtonsEndOfService = styled.div`
   display: flex;
   justify-content: flex-end;
   margin: 50px 0;
+`;
+
+export const IndexContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: ${(props) => props.theme["gray-600"]};
+  & > section {
+    display: flex;
+    align-items: center;
+  }
 `;

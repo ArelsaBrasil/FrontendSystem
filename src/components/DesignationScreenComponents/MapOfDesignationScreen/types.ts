@@ -4,30 +4,29 @@ export interface ApiResponse {
   status: number;
   createdAt: string;
   finishedAt: string | null;
-  pointId: {
-    id: number;
-    lat: string;
-    lng: string;
-    address: string;
-    model: string;
-    serialNumber: string;
-    lastChange: string | null;
-    createdAt: string;
-  };
+  group: null | GroupInfo;
+  pointId: TPointInfos;
 }
 
-export type TPointInfos = {
+export interface GroupInfo {
+  id: number;
+  uuid: string;
+  groupName: string;
+  createdAt: string;
+}
+
+export interface TPointInfos {
   osInfo: ApiResponse | null | undefined;
-  lat: number;
-  lng: number;
+  id: number;
+  lat: string;
+  lng: string;
   address: string;
   model: string;
-  serialNumber: number;
-  lastChange: Date | null;
-  createdAt: Date;
-  id: number;
-};
-
+  serialNumber: string;
+  lastChange: string | null;
+  createdAt: string;
+  osInfos: ApiResponse[];
+}
 export interface IMap {
   onMarkerClick: (pointData: TPointInfos) => void;
   selectedMarkers: TPointInfos[];

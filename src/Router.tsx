@@ -12,6 +12,8 @@ import { LuzesHome } from "./pages/LuzesHome";
 import { FormDataProvider } from "./context/FormDataContext";
 import { OrganizingGroupScreen } from "./layouts/luzes/OrganizingGroupScreen";
 import { DesignateOSScreen } from "./layouts/luzes/DesignateOSScreen";
+import { ServiceOrder } from "./layouts/luzes/ServiceOrder";
+import { CreateUsersScreen } from "./layouts/luzes/CreateUsersScreen";
 
 export function Router() {
   return (
@@ -41,6 +43,14 @@ export function Router() {
             <Route
               path="/luzes/home/designar-os"
               element={<DesignateOSScreen />}
+            />
+            <Route
+              path="/luzes/home/criacao-usuario"
+              element={<CreateUsersScreen />}
+            />
+            <Route
+              path="/luzes/home/os"
+              element={<ServiceOrder />}
             />
           </Route>
         </Routes>

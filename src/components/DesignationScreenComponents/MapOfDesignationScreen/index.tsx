@@ -7,7 +7,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { OsInfos } from "../../../api/OsInfos";
 import { MapContainer, MapContent } from "./styles";
-import { ApiResponse, IMap, TPointInfos } from "./types";
+import { ApiResponse, GroupInfo, IMap, TPointInfos } from "./types";
 
 const blueCircle =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Circulo_azul.png/600px-Circulo_azul.png?20200319115844";
@@ -58,31 +58,31 @@ export function MapOfDesignationScreen({
 }: IMap) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyC6yhQbZldZk3535d-bgJiaR3mus98dtcw",
+    googleMapsApiKey: "AIzaSyD6-B0jpVxbauSAnn9Y0exqw3igo_QrQWk",
   });
+
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
-  const [points, setPoints] = useState<TPointInfos[] | null>([]);
-  const [osInfos, setosInfos] = useState<ApiResponse[] | null>([]);
+  const [osInfos, setOsInfos] = useState<ApiResponse[] | null>([]);
 
   useEffect(() => {
-    async function fetchDataAndSetPoints() {
+    let isMounted = true;
+
+    async function fetchDataAndSetOsInfos() {
       try {
         const returnOsInfos = await OsInfos();
-        console.log(returnOsInfos);
-        setosInfos(returnOsInfos);
-        if (returnOsInfos) {
-          const extractedPoints = returnOsInfos.map(
-            (osInfo: { pointId: ApiResponse }) => osInfo.pointId
-          );
-
-          setPoints(extractedPoints);
+        if (isMounted) {
+          setOsInfos(returnOsInfos);
         }
       } catch (error) {
         console.error("Erro ao buscar informações:", error as any);
       }
     }
 
-    fetchDataAndSetPoints();
+    fetchDataAndSetOsInfos();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -101,68 +101,69 @@ export function MapOfDesignationScreen({
   const handleMarkerClick = (pointInfos: TPointInfos) => {
     const osIdOfPoint =
       osInfos && osInfos.find((osInfo) => osInfo.pointId.id === pointInfos.id);
-      pointInfos.osInfo = osIdOfPoint
-     onMarkerClick(pointInfos);
+    pointInfos.osInfo = osIdOfPoint;
+    onMarkerClick(pointInfos);
   };
 
-  const handleMapLoad = (map: google.maps.Map) => {
-    mapInstanceRef.current = map;
-  };
   return (
     <>
-      {isLoaded && points && (
+      {isLoaded && osInfos && (
         <MapContainer>
-          <>
-            <MapContent>
-              <GoogleMap
-                clickableIcons={false}
-                mapContainerStyle={{ width: "100%", height: "100%" }}
-                center={centerPosition}
-                zoom={18}
-                options={{
-                  streetViewControl: false,
-                }}
-                onLoad={handleMapLoad}
-              >
-                <MarkerClusterer options={optionsCluster}>
-                  {(clusterer) => (
-                    <>
-                      {points &&
-                        points.map((point) => {
-                          const id = Number(point.serialNumber);
-                          const isSelected = selectedMarkers.some(
-                            (pointUnit) =>
-                              pointUnit.serialNumber === point.serialNumber
-                          );
+          <MapContent>
+            <GoogleMap
+              clickableIcons={false}
+              mapContainerStyle={{ width: "100%", height: "100%" }}
+              center={centerPosition}
+              zoom={18}
+              options={{
+                streetViewControl: false,
+              }}
+              onLoad={(map) => {
+                mapInstanceRef.current = map;
+              }}
+            >
+              <MarkerClusterer options={optionsCluster}>
+                {(clusterer) => (
+                  <>
+                    {osInfos.map((osInfo) => {
+                      const point = osInfo.pointId;
+                      const id = Number(point.serialNumber);
+                      const isSelected = selectedMarkers.some(
+                        (pointUnit: { serialNumber: string }) =>
+                          pointUnit.serialNumber === point.serialNumber
+                      );
 
-                          return (
-                            <Marker
-                              key={id}
-                              position={{
-                                lat: Number(point.lat),
-                                lng: Number(point.lng),
-                              }}
-                              onClick={() => handleMarkerClick(point)}
-                              clusterer={clusterer}
-                              icon={{
-                                url: isSelected
-                                  ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
-                                  : "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                                scaledSize:
-                                  isSelected &&
-                                  hoverMarkerId?.toString() === id.toString()
-                                    ? new window.google.maps.Size(50, 50)
-                                    : new window.google.maps.Size(30, 30),
-                              }}
-                            />
-                          );
-                        })}
-                    </>
-                  )}
-                </MarkerClusterer>
-              </GoogleMap>
-            </MapContent>
-          </>
+                      const hasGroup = osInfo.group !== null;
+
+                      return (
+                        <Marker
+                          key={id}
+                          position={{
+                            lat: Number(point.lat),
+                            lng: Number(point.lng),
+                          }}
+                          onClick={() => handleMarkerClick(point)}
+                          clusterer={clusterer}
+                          icon={{
+                            url: isSelected
+                              ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                              : hasGroup
+                              ? "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                              : "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                            scaledSize:
+                              isSelected &&
+                              hoverMarkerId?.toString() === id.toString()
+                                ? new window.google.maps.Size(50, 50)
+                                : new window.google.maps.Size(30, 30),
+                          }}
+                        />
+                      );
+                    })}
+                  </>
+                )}
+              </MarkerClusterer>
+            </GoogleMap>
+          </MapContent>
         </MapContainer>
       )}
     </>

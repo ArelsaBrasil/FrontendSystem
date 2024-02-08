@@ -78,7 +78,7 @@ export function Map({
 }: MapI) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyC6yhQbZldZk3535d-bgJiaR3mus98dtcw",
+    googleMapsApiKey: "AIzaSyD6-B0jpVxbauSAnn9Y0exqw3igo_QrQWk",
   });
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const [points, setPoints] = useState<TPointInfos[] | null>([]);
