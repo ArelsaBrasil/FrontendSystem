@@ -1,10 +1,9 @@
-import { LoginLayout } from "../layouts/LoginLayout";
+import { LoginLayout } from "../layouts/luzes/LoginLayout";
 
 export function Luzes() {
   return (
     <>
       <LoginLayout />
-      {/* <h1>Luzes</h1> */}
     </>
   );
 }
